@@ -12,36 +12,33 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Scripts & Styles -->
+    <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-100">
 
-    {{-- Barra superior de Breeze (desktop) --}}
+    {{-- Barra superior de Breeze (desktop) --}}
     @include('layouts.navigation')
 
-    {{-- Pestaña móvil que abre el sidebar (solo < 640 px) --}}
+    {{-- Pestaña móvil que abre el sidebar (solo < 640px) --}}
     <button
-        x-data                          {{-- ← añade esto --}}
+        x-data
         class="sm:hidden fixed top-4 left-4 z-50
             bg-gray-900 text-gray-100 px-3 py-2 rounded-r-lg
             font-semibold tracking-wide shadow-lg"
-        @click="$dispatch('toggle-mobile-menu')"   {{-- ahora sí funciona --}}
+        @click="$dispatch('toggle-sidebar')"
     >
-        Marvel Plays
+        Marvel Plays
     </button>
 
-    <x-navigation.mobile-menu />
-
-
-    {{-- Contenedor principal: sidebar + contenido --}}
+    {{-- Contenedor principal: sidebar + contenido --}}
     <div class="min-h-screen flex">
-        {{-- Sidebar reutilizable (responsive) --}}
+        {{-- Sidebar responsivo: fijo en desktop, emergente en móvil --}}
         <x-navigation.sidebar />
 
-        {{-- Área de la página --}}
+        {{-- Área de la página --}}
         <div class="flex-1 flex flex-col">
-            {{-- Encabezado opcional de cada vista --}}
+            {{-- Encabezado opcional de cada página --}}
             @isset($header)
                 <header class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -50,7 +47,7 @@
                 </header>
             @endisset
 
-            {{-- Contenido principal --}}
+            {{-- Contenido principal --}}
             <main class="flex-1 p-6">
                 {{ $slot }}
             </main>
