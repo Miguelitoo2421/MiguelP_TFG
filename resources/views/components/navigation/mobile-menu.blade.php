@@ -1,3 +1,4 @@
+{{--resources\views\components\navigation\mobile-menu.blade.php--}}
 @props([
   'links',
   'event'     => 'toggle-mobile-menu',

@@ -23,13 +23,19 @@ Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth','role:admin'])
     ->group(function(){
-        // Mostrar la tabla de usuarios
-        Route::get('users', [UserController::class,'index'])
-             ->name('users.index');
-        // Procesar el formulario de cambio de roles
-        Route::post('users/{user}/roles', [UserController::class,'updateRoles'])
-             ->name('users.updateRoles');
-    });
+     /*
+        Route::get('users',             [UserController::class,'index'])->name('users.index');
+        Route::get('users/create',      [UserController::class,'create'])->name('users.create');
+        Route::get('users/{user}/edit', [UserController::class,'edit'])->name('users.edit');
+        Route::patch('users/{user}',    [UserController::class,'update'])->name('users.update');
+        Route::post('users',            [UserController::class,'store'])->name('users.store');
+        Route::delete('users/{user}',   [UserController::class,'destroy'])->name('users.destroy');
+     */   
 
+        Route::get  ('users',          [UserController::class,'index'])->name('users.index');
+        Route::post ('users',          [UserController::class,'store'])->name('users.store');
+        Route::patch('users/{user}',   [UserController::class,'update'])->name('users.update');
+        Route::delete('users/{user}',  [UserController::class,'destroy'])->name('users.destroy');
+    });
 
 require __DIR__.'/auth.php';

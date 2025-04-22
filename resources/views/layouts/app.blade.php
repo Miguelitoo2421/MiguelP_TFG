@@ -1,60 +1,59 @@
 {{-- resources/views/layouts/app.blade.php --}}
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_','-',app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>{{ config('app.name','Laravel') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Scripts & Styles -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <!-- Evitar parpadeo de elementos con x-cloak -->
+  <style>
+    [x-cloak] { display: none !important; }
+  </style>
+
+  @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-100">
 
-    {{-- Barra superior de Breeze (desktop) --}}
-    @include('layouts.navigation')
+  {{-- Pestaña móvil que abre el sidebar (solo < 640px) --}}
+  <x-sidebar-plays-button>
+    Marvel Plays
+  </x-sidebar-plays-button>
 
-    {{-- Pestaña móvil que abre el sidebar (solo < 640px) --}}
-    <button
-        x-data
-        class="sm:hidden fixed top-4 left-4 z-50
-            bg-gray-900 text-gray-100 px-3 py-2 rounded-r-lg
-            font-semibold tracking-wide shadow-lg"
-        @click="$dispatch('toggle-sidebar')"
-    >
-        Marvel Plays
-    </button>
+  {{-- navegación principal --}}
+  @include('layouts.navigation')
 
-    {{-- Contenedor principal: sidebar + contenido --}}
-    <div class="min-h-screen flex">
-        {{-- Sidebar responsivo: fijo en desktop, emergente en móvil --}}
-        <x-navigation.sidebar />
+  <div class="flex h-screen overflow-hidden">
+    {{-- Sidebar pegajoso --}}
+    <x-navigation.sidebar  
+      class="w-64 flex-shrink-0 bg-white border-r
+             h-full sticky top-0 overflow-auto"
+    />
 
-        {{-- Área de la página --}}
-        <div class="flex-1 flex flex-col">
-            {{-- Encabezado opcional de cada página --}}
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+    {{-- Contenedor principal con scroll interno --}}
+    <div class="flex-1 flex flex-col overflow-auto">
+      @isset($header)
+        <header class="bg-white shadow">
+          <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            {{ $header }}
+          </div>
+        </header>
+      @endisset
 
-            {{-- Contenido principal --}}
-            <main class="flex-1 p-6">
-                {{ $slot }}
-            </main>
-        </div>
+      <main class="flex-1 p-6 overflow-auto">
+        {{ $slot }}
+      </main>
     </div>
+  </div>
 
-    @stack('modals')
-    @stack('scripts')
+  {{-- Modales y scripts --}}
+  @stack('modals')
+  @stack('scripts')
 </body>
 </html>
