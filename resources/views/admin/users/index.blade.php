@@ -38,6 +38,7 @@
 
                     <!-- Botón delete user -->
                     <x-danger-button
+                      class="ml-2"
                       x-on:click.prevent="$dispatch('open-modal','confirm-delete-{{ $user->id }}')"
                     >Delete</x-danger-button>
                     </form>
