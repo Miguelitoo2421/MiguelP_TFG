@@ -8,9 +8,14 @@ return [
         'roles' => ['admin', 'user'],
     ],
     [
-        'name'  => 'Profile',
-        'route' => 'profile.edit',
+        'name'  => '',
+        'route' => '',
         'roles' => ['admin', 'user'],
+    ],
+    [
+        'name'  => 'Users',
+        'route' => 'admin.users.index',
+        'roles' => ['admin'],
     ],
     // aqui agregaremos mas enlaces cuando los tengamos.
 ];
