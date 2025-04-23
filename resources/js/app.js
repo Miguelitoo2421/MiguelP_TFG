@@ -1,21 +1,19 @@
-// resources/js/app.js (o donde tengas tu entrypoint)
-
-import simpleParallax from 'simple-parallax-js';
 import './bootstrap';
 import Alpine from 'alpinejs';
+import SimpleParallax from 'simple-parallax-js';
+
 window.Alpine = Alpine;
 
-// En lugar de DOMContentLoaded:
 window.addEventListener('load', () => {
   const images = document.querySelectorAll('.parallax');
-  if (images.length) {
-    new simpleParallax(images, {
-      scale:       1.2,
-      delay:       0.2,
-      transition:  'cubic-bezier(0,0,0,1)',
-      overflow:    true,
-    });
-  }
+  new SimpleParallax(images, {
+    orientation: 'up',
+    scale:       1.2,
+    overflow:    true,
+    delay:       0.6,
+    transition:  'ease-out',
+    maxTransition: 50,
+  });
 });
 
 Alpine.start();
