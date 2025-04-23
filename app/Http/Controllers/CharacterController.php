@@ -3,63 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Character;
+use App\Models\Play;
 use Illuminate\Http\Request;
 
 class CharacterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //
+        $characters = Character::with('play')->orderBy('name')->paginate(15);
+        return view('characters.index', compact('characters'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $plays = Play::orderBy('name')->pluck('name','id');
+        return view('characters.create', compact('plays'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name'    => ['required','string','max:50'],
+            'play_id' => ['required','exists:plays,id'],
+            'notes'   => ['nullable','string','max:255'],
+            'image'   => ['nullable','string','max:255'],
+        ]);
+
+        Character::create($data);
+
+        return redirect()
+            ->route('characters.index')
+            ->with('success', 'Personaje creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Character $character)
     {
-        //
+        return view('characters.show', compact('character'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Character $character)
     {
-        //
+        $plays = Play::orderBy('name')->pluck('name','id');
+        return view('characters.edit', compact('character','plays'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Character $character)
     {
-        //
+        $data = $request->validate([
+            'name'    => ['required','string','max:50'],
+            'play_id' => ['required','exists:plays,id'],
+            'notes'   => ['nullable','string','max:255'],
+            'image'   => ['nullable','string','max:255'],
+        ]);
+
+        $character->update($data);
+
+        return redirect()
+            ->route('characters.index')
+            ->with('success', 'Personaje actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Character $character)
     {
-        //
+        $character->delete();
+
+        return redirect()
+            ->route('characters.index')
+            ->with('success', 'Personaje eliminado correctamente.');
     }
 }

@@ -7,59 +7,84 @@ use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //
+        $locations = Location::orderBy('city')->paginate(15);
+        return view('locations.index', compact('locations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('locations.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'city'         => ['required','string','max:50'],
+            'province'     => ['nullable','string','max:50'],
+            'region'       => ['nullable','string','max:50'],
+            'street_type'  => ['nullable','string','max:20'],
+            'street_name'  => ['nullable','string','max:100'],
+            'street_number'=> ['nullable','string','max:10'],
+            'postal_code'  => ['nullable','string','max:10'],
+            'url_map'      => ['nullable','string','max:255'],
+            'phone'        => ['nullable','string','max:20'],
+            'active'       => ['required','boolean'],
+            'notes'        => ['nullable','string','max:255'],
+        ]);
+
+        Location::create($data);
+
+        return redirect()
+            ->route('locations.index')
+            ->with('success', 'Localización creada correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Location $location)
     {
-        //
+        return view('locations.show', compact('location'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Location $location)
     {
-        //
+        return view('locations.edit', compact('location'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Location $location)
     {
-        //
+        $data = $request->validate([
+            'city'         => ['required','string','max:50'],
+            'province'     => ['nullable','string','max:50'],
+            'region'       => ['nullable','string','max:50'],
+            'street_type'  => ['nullable','string','max:20'],
+            'street_name'  => ['nullable','string','max:100'],
+            'street_number'=> ['nullable','string','max:10'],
+            'postal_code'  => ['nullable','string','max:10'],
+            'url_map'      => ['nullable','string','max:255'],
+            'phone'        => ['nullable','string','max:20'],
+            'active'       => ['required','boolean'],
+            'notes'        => ['nullable','string','max:255'],
+        ]);
+
+        $location->update($data);
+
+        return redirect()
+            ->route('locations.index')
+            ->with('success', 'Localización actualizada correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Location $location)
     {
-        //
+        $location->delete();
+
+        return redirect()
+            ->route('locations.index')
+            ->with('success', 'Localización eliminada correctamente.');
     }
 }

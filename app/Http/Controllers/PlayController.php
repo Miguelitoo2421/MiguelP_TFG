@@ -3,63 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Play;
+use App\Models\Producer;
 use Illuminate\Http\Request;
 
 class PlayController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //
+        $plays = Play::with('producer')->orderBy('name')->paginate(15);
+        return view('plays.index', compact('plays'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $producers = Producer::orderBy('name')->pluck('name','id');
+        return view('plays.create', compact('producers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name'        => ['required','string','max:100'],
+            'producer_id' => ['required','exists:producers,id'],
+            'active'      => ['required','boolean'],
+            'notes'       => ['nullable','string','max:255'],
+        ]);
+
+        Play::create($data);
+
+        return redirect()
+            ->route('plays.index')
+            ->with('success', 'Obra creada correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Play $play)
     {
-        //
+        return view('plays.show', compact('play'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Play $play)
     {
-        //
+        $producers = Producer::orderBy('name')->pluck('name','id');
+        return view('plays.edit', compact('play','producers'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Play $play)
     {
-        //
+        $data = $request->validate([
+            'name'        => ['required','string','max:100'],
+            'producer_id' => ['required','exists:producers,id'],
+            'active'      => ['required','boolean'],
+            'notes'       => ['nullable','string','max:255'],
+        ]);
+
+        $play->update($data);
+
+        return redirect()
+            ->route('plays.index')
+            ->with('success', 'Obra actualizada correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Play $play)
     {
-        //
+        $play->delete();
+
+        return redirect()
+            ->route('plays.index')
+            ->with('success', 'Obra eliminada correctamente.');
     }
 }
