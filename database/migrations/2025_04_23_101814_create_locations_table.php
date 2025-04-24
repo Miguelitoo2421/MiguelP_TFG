@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('street_type', 50);
             $table->string('street_name', 50);
             $table->string('street_number', 10);
-            $table->string('postal_code', 5);
+            $table->string('postal_code', 20);
             $table->string('url_map', 255)->nullable();
             $table->string('phone', 15)->nullable();
             $table->boolean('active');
