@@ -31,15 +31,25 @@ class DatabaseSeeder extends Seeder
 
         // 3) Entidades de catálogo
         $producer = Producer::factory()->create();
+        
+
         $play     = Play::factory()->create(['producer_id' => $producer->id]);
+        
+
         $location = Location::factory()->create();
+        
+
         $actor    = Actor::factory()->create();
+        
+
         $character= Character::factory()->create(['play_id' => $play->id]);
+        
 
         // 4) Relacionar actor con personaje (pivot)
         $actor->characters()->attach($character->id, [
             'mastery_level' => 5,
             'notes'         => 'Nivel de dominio medio',
         ]);
+        
     }
 }

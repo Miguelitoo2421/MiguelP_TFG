@@ -14,7 +14,7 @@
 
       {{ $slot }} {{-- aquí slot para los campos de cada entidad --}}
 
-      <div class="flex justify-end space-x-2 pt-4 border-t">
+      <div class="flex justify-center space-x-2 pt-4 border-t">
           <x-secondary-button
               type="button"
               @click="$dispatch('close-modal','{{ $modalName }}')"

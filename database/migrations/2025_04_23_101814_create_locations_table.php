@@ -11,19 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Si no te importa perder datos en local:
+        Schema::dropIfExists('locations');
+
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('city', 30);
-            $table->string('province', 30);
-            $table->string('region', 30);
-            $table->string('street_type', 50);
-            $table->string('street_name', 50);
-            $table->string('street_number', 10);
-            $table->string('postal_code', 20);
-            $table->string('url_map', 255)->nullable();
-            $table->string('phone', 15)->nullable();
+            
+            // Ciudad sigue siendo obligatorio
+            $table->string('city', 50);
+            
+            // El resto opcional
+            $table->string('province',     50)->nullable();
+            $table->string('region',       50)->nullable();
+            $table->string('street_type',  100)->nullable();
+            $table->string('street_name',  100)->nullable();
+            $table->string('street_number', 20)->nullable();
+            $table->string('postal_code',   20)->nullable();
+            
+            // Mantenemos la URL al mapa como opcional
+            $table->string('url_map',      255)->nullable();
+            $table->string('phone',        20)->nullable();
+            
             $table->boolean('active');
-            $table->string('notes', 255)->nullable();
+            $table->string('notes',       255)->nullable();
             $table->timestamps();
         });
     }

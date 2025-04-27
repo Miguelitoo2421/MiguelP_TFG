@@ -19,9 +19,10 @@
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Photo') }}</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Image') }}</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Name') }}</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Play') }}</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Notes') }}</th>
             <th class="px-6 py-3"></th>
           </tr>
         </thead>
@@ -32,20 +33,36 @@
                 @if($character->image)
                   <div class="inline-block transform transition duration-150 ease-in-out hover:scale-125">
                     <div class="h-16 w-16 overflow-hidden rounded">
-                      <img src="{{ Storage::url($character->image) }}" alt="{{ $character->name }}" class="h-full w-full object-cover" />
+                      <img
+                        src="{{ Storage::url($character->image) }}"
+                        alt="{{ $character->name }}"
+                        class="h-full w-full object-cover"
+                      />
                     </div>
                   </div>
                 @else
                   &mdash;
                 @endif
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $character->name }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $character->play?->name }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                <x-secondary-button style="link" @click="$dispatch('open-modal','edit-character-{{ $character->id }}')">
+              <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
+                {{ $character->name }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
+                {{ $character->play?->name }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
+                <span
+                  class="cursor-pointer"
+                  title="{{ $character->notes ?: '...' }}"
+                >📝</span>
+              </td>              
+              <td class="px-6 py-4 whitespace-nowrap text-base text-right">
+                <x-secondary-button style="link"
+                  @click="$dispatch('open-modal','edit-character-{{ $character->id }}')">
                   {{ __('Edit') }}
                 </x-secondary-button>
-                <x-danger-button class="ml-2" @click.prevent="$dispatch('open-modal','confirm-delete-character-{{ $character->id }}')">
+                <x-danger-button class="ml-2"
+                  @click.prevent="$dispatch('open-modal','confirm-delete-character-{{ $character->id }}')">
                   {{ __('Delete') }}
                 </x-danger-button>
               </td>
@@ -85,7 +102,7 @@
       <textarea id="notes" name="notes" class="mt-1 block w-full border-gray-300 rounded"></textarea>
       <x-input-error :messages="$errors->get('notes')" class="mt-2" />
 
-      <x-input-label for="image" :value="__('Photo')" />
+      <x-input-label for="image" :value="__('Image')" />
       <input id="image" name="image" type="file" class="mt-1 block w-full" />
       <x-input-error :messages="$errors->get('image')" class="mt-2" />
     </x-modal-form>

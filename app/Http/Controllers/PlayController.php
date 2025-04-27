@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Play;
 use App\Models\Producer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PlayController extends Controller
 {
@@ -15,14 +16,10 @@ class PlayController extends Controller
 
     public function index()
     {
-        $plays = Play::with('producer')->orderBy('name')->paginate(15);
-        return view('plays.index', compact('plays'));
-    }
-
-    public function create()
-    {
+        $plays     = Play::with('producer')->orderBy('name')->paginate(15);
         $producers = Producer::orderBy('name')->pluck('name','id');
-        return view('plays.create', compact('producers'));
+
+        return view('plays.index', compact('plays', 'producers'));
     }
 
     public function store(Request $request)
@@ -32,24 +29,19 @@ class PlayController extends Controller
             'producer_id' => ['required','exists:producers,id'],
             'active'      => ['required','boolean'],
             'notes'       => ['nullable','string','max:255'],
+            'image'       => ['nullable','image','max:2048'],  // valida imagen
         ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')
+                                    ->store('plays','public');
+        }
 
         Play::create($data);
 
         return redirect()
             ->route('plays.index')
-            ->with('success', 'Obra creada correctamente.');
-    }
-
-    public function show(Play $play)
-    {
-        return view('plays.show', compact('play'));
-    }
-
-    public function edit(Play $play)
-    {
-        $producers = Producer::orderBy('name')->pluck('name','id');
-        return view('plays.edit', compact('play','producers'));
+            ->with('success', 'Play created successfully.');
     }
 
     public function update(Request $request, Play $play)
@@ -59,21 +51,34 @@ class PlayController extends Controller
             'producer_id' => ['required','exists:producers,id'],
             'active'      => ['required','boolean'],
             'notes'       => ['nullable','string','max:255'],
+            'image'       => ['nullable','image','max:2048'],  // valida imagen
         ]);
+
+        if ($request->hasFile('image')) {
+            // borrar imagen anterior si existe
+            if ($play->image && Storage::disk('public')->exists($play->image)) {
+                Storage::disk('public')->delete($play->image);
+            }
+            $data['image'] = $request->file('image')
+                                    ->store('plays','public');
+        }
 
         $play->update($data);
 
         return redirect()
             ->route('plays.index')
-            ->with('success', 'Obra actualizada correctamente.');
+            ->with('success', 'Play updated successfully.');
     }
 
     public function destroy(Play $play)
     {
+        if ($play->image && Storage::disk('public')->exists($play->image)) {
+            Storage::disk('public')->delete($play->image);
+        }
         $play->delete();
 
         return redirect()
             ->route('plays.index')
-            ->with('success', 'Obra eliminada correctamente.');
+            ->with('success', 'Play deleted successfully.');
     }
 }

@@ -49,13 +49,13 @@
                                     &mdash;
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap  text-gray-900">
                                 {{ $producer->name }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap  text-gray-900">
                                 {{ $producer->cif }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                            <td class="px-6 py-4 whitespace-nowrap text-right ">
                                 <x-secondary-button
                                     style="link"
                                     @click="$dispatch('open-modal','edit-producer-{{ $producer->id }}')"
@@ -90,15 +90,6 @@
             title="{{ __('New Producer') }}"
             submit-text="{{ __('Create') }}"
         >
-            <x-input-label for="image" :value="__('Photo')" />
-            <input
-                id="image"
-                name="image"
-                type="file"
-                class="mt-1 block w-full"
-            />
-            <x-input-error :messages="$errors->get('image')" class="mt-2" />
-
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input
                 id="name"
@@ -118,6 +109,15 @@
                 required
             />
             <x-input-error :messages="$errors->get('cif')" class="mt-2" />
+
+                <x-input-label for="image" :value="__('Image')" />
+                <input
+                    id="image"
+                    name="image"
+                    type="file"
+                    class="mt-1 block w-full"
+                />
+                <x-input-error :messages="$errors->get('image')" class="mt-2" />    
         </x-modal-form>
 
         {{-- Modals: Edit Producer --}}
@@ -131,24 +131,6 @@
                 title="{{ __('Edit Producer') }}"
                 submit-text="{{ __('Save') }}"
             >
-                <x-input-label for="image-{{ $producer->id }}" :value="__('Photo')" />
-                <input
-                    id="image-{{ $producer->id }}"
-                    name="image"
-                    type="file"
-                    class="mt-1 block w-full"
-                />
-                @if($producer->image)
-                    <div class="mt-2 inline-block transform transition duration-150 ease-in-out hover:scale-125">
-                        <div class="h-20 w-20 overflow-hidden rounded">
-                            <img
-                                src="{{ Storage::url($producer->image) }}"
-                                alt="{{ $producer->name }}"
-                                class="h-full w-full object-cover"
-                            />
-                        </div>
-                    </div>
-                @endif
                 <x-input-error :messages="$errors->get('image')" class="mt-2" />
 
                 <x-input-label for="name-{{ $producer->id }}" :value="__('Name')" />
@@ -172,6 +154,24 @@
                     required
                 />
                 <x-input-error :messages="$errors->get('cif')" class="mt-2" />
+                    <x-input-label for="image-{{ $producer->id }}" :value="__('Image')" />
+                        <input
+                            id="image-{{ $producer->id }}"
+                            name="image"
+                            type="file"
+                            class="mt-1 block w-full"
+                        />
+                        @if($producer->image)
+                            <div class="mt-2 inline-block transform transition duration-150 ease-in-out hover:scale-125">
+                                <div class="h-20 w-20 overflow-hidden rounded">
+                                    <img
+                                        src="{{ Storage::url($producer->image) }}"
+                                        alt="{{ $producer->name }}"
+                                        class="h-full w-full object-cover"
+                                    />
+                                </div>
+                            </div>
+                        @endif
             </x-modal-form>
         @endforeach
 

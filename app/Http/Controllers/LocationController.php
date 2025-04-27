@@ -18,25 +18,21 @@ class LocationController extends Controller
         return view('locations.index', compact('locations'));
     }
 
-    public function create()
-    {
-        return view('locations.create');
-    }
-
     public function store(Request $request)
     {
+        
         $data = $request->validate([
-            'city'         => ['required','string','max:50'],
-            'province'     => ['nullable','string','max:50'],
-            'region'       => ['nullable','string','max:50'],
-            'street_type'  => ['nullable','string','max:20'],
-            'street_name'  => ['nullable','string','max:100'],
-            'street_number'=> ['nullable','string','max:10'],
-            'postal_code'  => ['nullable','string','max:10'],
-            'url_map'      => ['nullable','string','max:255'],
-            'phone'        => ['nullable','string','max:20'],
-            'active'       => ['required','boolean'],
-            'notes'        => ['nullable','string','max:255'],
+            'city'          => ['required','string','max:50'],
+            'province'      => ['nullable','string','max:50'],
+            'region'        => ['nullable','string','max:50'],
+            'street_type'   => ['nullable','string','max:20'],
+            'street_name'   => ['nullable','string','max:100'],
+            'street_number' => ['nullable','string','max:10'],
+            'postal_code'   => ['nullable','string','max:10'],
+            'url_map'       => ['nullable','url','max:255'],
+            'phone'         => ['nullable','string','max:20'],
+            'active'        => ['required','boolean'],
+            'notes'         => ['nullable','string','max:255'],
         ]);
 
         Location::create($data);
@@ -46,30 +42,20 @@ class LocationController extends Controller
             ->with('success', 'Localización creada correctamente.');
     }
 
-    public function show(Location $location)
-    {
-        return view('locations.show', compact('location'));
-    }
-
-    public function edit(Location $location)
-    {
-        return view('locations.edit', compact('location'));
-    }
-
     public function update(Request $request, Location $location)
     {
         $data = $request->validate([
-            'city'         => ['required','string','max:50'],
-            'province'     => ['nullable','string','max:50'],
-            'region'       => ['nullable','string','max:50'],
-            'street_type'  => ['nullable','string','max:20'],
-            'street_name'  => ['nullable','string','max:100'],
-            'street_number'=> ['nullable','string','max:10'],
-            'postal_code'  => ['nullable','string','max:10'],
-            'url_map'      => ['nullable','string','max:255'],
-            'phone'        => ['nullable','string','max:20'],
-            'active'       => ['required','boolean'],
-            'notes'        => ['nullable','string','max:255'],
+            'city'          => ['required','string','max:50'],
+            'province'      => ['nullable','string','max:50'],
+            'region'        => ['nullable','string','max:50'],
+            'street_type'   => ['nullable','string','max:20'],
+            'street_name'   => ['nullable','string','max:100'],
+            'street_number' => ['nullable','string','max:10'],
+            'postal_code'   => ['nullable','string','max:10'],
+            'url_map'       => ['nullable','url','max:255'],
+            'phone'         => ['nullable','string','max:20'],
+            'active'        => ['required','boolean'],
+            'notes'         => ['nullable','string','max:255'],
         ]);
 
         $location->update($data);
