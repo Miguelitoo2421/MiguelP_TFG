@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ config('app.name', 'Laravel') }}</title>
+  <link rel="icon" type="image/png"
+      href="{{ asset('images/logo_barra_busqueda.png') }}"
+      sizes="64x64 32x32 16x16">
   @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   @endif
