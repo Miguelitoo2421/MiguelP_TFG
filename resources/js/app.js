@@ -1,4 +1,5 @@
 import './bootstrap';
+import * as Turbo from "@hotwired/turbo"
 import Alpine from 'alpinejs';
 import intersect from '@alpinejs/intersect';
 import simpleParallax from 'simple-parallax-js/vanilla';
