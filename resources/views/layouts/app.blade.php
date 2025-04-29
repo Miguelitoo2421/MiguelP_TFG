@@ -1,4 +1,3 @@
-{{-- resources/views/layouts/app.blade.php --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_','-',app()->getLocale()) }}">
 <head>
@@ -7,15 +6,14 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>{{ config('app.name', 'Laravel') }}</title>
+  <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.bunny.net">
   <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
   <!-- Prevent flash of unstyled content -->
-  <style>
-    [x-cloak] { display: none !important; }
-  </style>
+  <style>[x-cloak] { display: none !important; }</style>
 
   <!-- Google Maps JavaScript API -->
   <script
@@ -26,15 +24,25 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-100">
-  <x-sidebar-plays-button>Marvel Plays</x-sidebar-plays-button>
 
+  {{-- Botón móvil: siempre fijo en viewport --}}
+  <x-sidebar-plays-button
+    class="fixed top-3 left-20 z-50 sm:hidden"
+    x-cloak
+  >
+    Marvel Plays
+  </x-sidebar-plays-button>
+
+  {{-- Navegación superior --}}
   @include('layouts.navigation')
 
   <div class="flex h-screen overflow-hidden">
+    {{-- Sidebar desktop fijo --}}
     <x-navigation.sidebar
-      class="w-64 flex-shrink-0 bg-white border-r h-full sticky top-0 overflow-auto"
+      class="hidden sm:flex w-64 flex-shrink-0 bg-white border-r h-full sticky top-0 overflow-auto"
     />
 
+    {{-- Contenido principal scrollable --}}
     <div class="flex-1 flex flex-col overflow-auto">
       @isset($header)
         <header class="bg-white shadow">
