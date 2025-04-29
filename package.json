@@ -18,6 +18,8 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
+        "@alpinejs/intersect": "^3.14.9",
+        "@googlemaps/js-api-loader": "^1.16.8",
         "simple-parallax-js": "^6.1.1"
     }
 }
