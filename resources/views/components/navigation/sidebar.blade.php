@@ -32,18 +32,20 @@
                                      && auth()->user()->getRoleNames()->intersect($link['roles'])->isNotEmpty()
                                     )
                                 );
+                        $isActive = request()->routeIs($link['route']);
                     @endphp
 
                     @if($show)
                         <x-nav-link
                             :href="route($link['route'])"
-                            :active="request()->routeIs($link['route'])"
+                            :active="$isActive"
                             class="block w-full px-4 py-2 rounded-md
-                                   transition-transform duration-150 ease-out
-                                   hover:scale-105
-                                   {{ request()->routeIs($link['route'])
-                                        ? 'bg-gray-800 text-white'
-                                        : 'text-gray-400 hover:text-white hover:bg-gray-800' }}"
+                                {{ $isActive
+                                    // Sin animación cuando está activo
+                                    ? 'bg-gray-800 text-white'
+                                    // Con animación cuando NO está activo
+                                    : 'text-gray-400 hover:text-white hover:bg-gray-800
+                                       transition-transform duration-150 ease-out hover:scale-105' }}"
                         >
                             {{ $link['name'] }}
                         </x-nav-link>
