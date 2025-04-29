@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Character;
 use App\Models\Play;
 use App\Models\Producer;
 use Illuminate\Http\Request;
@@ -16,20 +17,29 @@ class PlayController extends Controller
 
     public function index()
     {
-        $plays     = Play::with('producer')->orderBy('name')->paginate(15);
-        $producers = Producer::orderBy('name')->pluck('name','id');
+        $plays = Play::with(['producer', 'characters'])
+                     ->orderBy('name')
+                     ->paginate(15);
 
-        return view('plays.index', compact('plays', 'producers'));
+        $producers = Producer::orderBy('name')
+                     ->pluck('name', 'id');
+
+        $characters = Character::orderBy('name')
+                      ->pluck('name', 'id');
+
+        return view('plays.index', compact('plays', 'producers', 'characters'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'        => ['required','string','max:100'],
-            'producer_id' => ['required','exists:producers,id'],
-            'active'      => ['required','boolean'],
-            'notes'       => ['nullable','string','max:255'],
-            'image'       => ['nullable','image','max:2048'],  // valida imagen
+            'name'         => ['required','string','max:100'],
+            'producer_id'  => ['required','exists:producers,id'],
+            'active'       => ['required','boolean'],
+            'notes'        => ['nullable','string','max:255'],
+            'image'        => ['nullable','image','max:2048'],
+            'characters'   => ['nullable','array'],
+            'characters.*' => ['exists:characters,id'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -37,7 +47,15 @@ class PlayController extends Controller
                                     ->store('plays','public');
         }
 
-        Play::create($data);
+        // Creamos el play sin el campo characters
+        $play = Play::create(
+            collect($data)
+                ->except('characters')
+                ->toArray()
+        );
+
+        // Sincronizamos la relación pivote
+        $play->characters()->sync($data['characters'] ?? []);
 
         return redirect()
             ->route('plays.index')
@@ -47,15 +65,16 @@ class PlayController extends Controller
     public function update(Request $request, Play $play)
     {
         $data = $request->validate([
-            'name'        => ['required','string','max:100'],
-            'producer_id' => ['required','exists:producers,id'],
-            'active'      => ['required','boolean'],
-            'notes'       => ['nullable','string','max:255'],
-            'image'       => ['nullable','image','max:2048'],  // valida imagen
+            'name'         => ['required','string','max:100'],
+            'producer_id'  => ['required','exists:producers,id'],
+            'active'       => ['required','boolean'],
+            'notes'        => ['nullable','string','max:255'],
+            'image'        => ['nullable','image','max:2048'],
+            'characters'   => ['nullable','array'],
+            'characters.*' => ['exists:characters,id'],
         ]);
 
         if ($request->hasFile('image')) {
-            // borrar imagen anterior si existe
             if ($play->image && Storage::disk('public')->exists($play->image)) {
                 Storage::disk('public')->delete($play->image);
             }
@@ -63,7 +82,15 @@ class PlayController extends Controller
                                     ->store('plays','public');
         }
 
-        $play->update($data);
+        // Actualizamos el play sin el campo characters
+        $play->update(
+            collect($data)
+                ->except('characters')
+                ->toArray()
+        );
+
+        // Sincronizamos la relación pivote
+        $play->characters()->sync($data['characters'] ?? []);
 
         return redirect()
             ->route('plays.index')
@@ -75,6 +102,7 @@ class PlayController extends Controller
         if ($play->image && Storage::disk('public')->exists($play->image)) {
             Storage::disk('public')->delete($play->image);
         }
+
         $play->delete();
 
         return redirect()

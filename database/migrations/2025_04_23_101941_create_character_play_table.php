@@ -13,11 +13,21 @@ return new class extends Migration
     {
         Schema::create('character_play', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('play_id');
-            $table->unsignedBigInteger('character_id');
-            $table->foreign('play_id')->references('id')->on('plays')->onDelete('cascade');
-            $table->foreign('character_id')->references('id')->on('characters')->onDelete('cascade');
-            $table->unique(['play_id', 'character_id']); // Evita duplicados
+
+            // FK a plays con borrado en cascada
+            $table->foreignId('play_id')
+                  ->constrained()
+                  ->cascadeOnDelete();
+
+            // FK a characters con borrado en cascada
+            $table->foreignId('character_id')
+                  ->constrained()
+                  ->cascadeOnDelete();
+
+            $table->timestamps();
+
+            // Evita duplicados
+            $table->unique(['play_id', 'character_id']);
         });
     }
 

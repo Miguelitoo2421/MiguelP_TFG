@@ -13,12 +13,20 @@ return new class extends Migration
     {
         Schema::create('actor_characters', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('actor_id')->nullable();
-            $table->unsignedBigInteger('character_id')->nullable();
+
+            // Usamos foreignId en lugar de unsignedBigInteger + foreign(), y añadimos cascadeOnDelete
+            $table->foreignId('actor_id')
+                  ->nullable()
+                  ->constrained()
+                  ->cascadeOnDelete();
+
+            $table->foreignId('character_id')
+                  ->nullable()
+                  ->constrained()
+                  ->cascadeOnDelete();
+
             $table->smallInteger('mastery_level');
             $table->string('notes', 255)->nullable();
-            $table->foreign('actor_id')->references('id')->on('actors');
-            $table->foreign('character_id')->references('id')->on('characters');
             $table->timestamps();
         });
     }
