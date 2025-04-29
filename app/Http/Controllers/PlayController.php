@@ -69,7 +69,7 @@ class PlayController extends Controller
             'producer_id'  => ['required','exists:producers,id'],
             'active'       => ['required','boolean'],
             'notes'        => ['nullable','string','max:255'],
-            'image'        => ['nullable','image','max:2048'],
+            'image'        => ['nullable','image','max:10240'],
             'characters'   => ['nullable','array'],
             'characters.*' => ['exists:characters,id'],
         ]);

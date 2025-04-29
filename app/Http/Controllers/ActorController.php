@@ -58,7 +58,7 @@ class ActorController extends Controller
             'city'       => ['nullable','string','max:30'],
             'active'     => ['required','boolean'],
             'notes'      => ['nullable','string','max:255'],
-            'image'      => ['nullable','image','max:2048'],
+            'image'      => ['nullable','image','max:10240'],
         ]);
 
         // Checkbox

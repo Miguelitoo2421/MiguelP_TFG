@@ -33,7 +33,7 @@ class ProducerController extends Controller
         $data = $request->validate([
             'name'  => ['required', 'string', 'max:50'],
             'cif'   => ['required', 'string', 'max:20', 'unique:producers,cif'],
-            'image' => ['nullable', 'image', 'max:2048'],
+            'image' => ['nullable', 'image', 'max:10240'],
         ]);
 
         if ($request->hasFile('image')) {

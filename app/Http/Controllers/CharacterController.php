@@ -60,7 +60,7 @@ class CharacterController extends Controller
             'name'    => 'required|string|max:50',
             'play_id' => 'nullable|exists:plays,id',
             'notes'   => 'nullable|string|max:255',
-            'image'   => 'nullable|image|max:2048',
+            'image'   => 'nullable|image|max:10240',
         ]);
 
         if ($request->hasFile('image')) {
