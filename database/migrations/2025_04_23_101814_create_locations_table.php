@@ -23,14 +23,14 @@ return new class extends Migration
             // El resto opcional
             $table->string('province',     50)->nullable();
             $table->string('region',       50)->nullable();
-            $table->string('street_type',  100)->nullable();
-            $table->string('street_name',  100)->nullable();
+            $table->string('street_type',  200)->nullable();
+            $table->string('street_name',  200)->nullable();
             $table->string('street_number', 20)->nullable();
             $table->string('postal_code',   20)->nullable();
             
-            // Mantenemos la URL al mapa como opcional
-            $table->string('url_map',      255)->nullable();
             $table->string('phone',        20)->nullable();
+            $table->decimal('latitude',  10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
             
             $table->boolean('active');
             $table->string('notes',       255)->nullable();

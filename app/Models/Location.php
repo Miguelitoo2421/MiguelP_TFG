@@ -12,7 +12,7 @@ class Location extends Model
     /**
      * Los campos que pueden asignarse en masa.
      *
-     * @var array<int,string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'city',
@@ -22,8 +22,9 @@ class Location extends Model
         'street_name',
         'street_number',
         'postal_code',
-        'url_map',
         'phone',
+        'latitude',
+        'longitude',
         'active',
         'notes',
     ];
