@@ -60,13 +60,13 @@
                                     style="link"
                                     @click="$dispatch('open-modal','edit-producer-{{ $producer->id }}')"
                                 >
-                                    {{ __('Edit') }}
+                                    {{ __('✏️') }}
                                 </x-secondary-button>
                                 <x-danger-button
                                     class="ml-2"
                                     @click.prevent="$dispatch('open-modal','delete-producer-{{ $producer->id }}')"
                                 >
-                                    {{ __('Delete') }}
+                                    {{ __('⛌') }}
                                 </x-danger-button>
                             </td>
                         </tr>

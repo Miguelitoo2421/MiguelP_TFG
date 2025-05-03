@@ -86,11 +86,11 @@
               <td class="px-6 py-4 whitespace-nowrap text-right text-base text-gray-900">
                 <x-secondary-button style="link"
                   @click="$dispatch('open-modal','edit-play-{{ $play->id }}')">
-                  {{ __('Edit') }}
+                  {{ __('✏️') }}
                 </x-secondary-button>
                 <x-danger-button class="ml-2"
                   @click.prevent="$dispatch('open-modal','confirm-delete-play-{{ $play->id }}')">
-                  {{ __('Delete') }}
+                  {{ __('⛌') }}
                 </x-danger-button>
               </td>
             </tr>

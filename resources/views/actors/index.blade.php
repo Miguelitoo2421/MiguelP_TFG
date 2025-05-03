@@ -39,9 +39,9 @@
                 @if($actor->image)
                   <div class="inline-block transform transition duration-150 ease-in-out hover:scale-125">
                     <div class="h-16 w-16 overflow-hidden rounded">
-                      <img src="{{ Storage::url($actor->image) }}"
-                           alt="{{ $actor->first_name }} {{ $actor->last_name }}"
-                           class="h-full w-full object-cover" />
+                      <img src="{{ $actor->profile_image_url }}"
+                          alt="{{ $actor->first_name }} {{ $actor->last_name }}"
+                          class="h-full w-full object-cover" />
                     </div>
                   </div>
                 @else
@@ -101,11 +101,11 @@
               <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900 text-right">
                 <x-secondary-button style="link"
                   @click="$dispatch('open-modal','edit-actor-{{ $actor->id }}')">
-                  {{ __('Edit') }}
+                  {{ __('✏️') }}
                 </x-secondary-button>
                 <x-danger-button class="ml-2"
                   @click.prevent="$dispatch('open-modal','confirm-delete-actor-{{ $actor->id }}')">
-                  {{ __('Delete') }}
+                  {{ __('⛌') }}
                 </x-danger-button>
               </td>
             </tr>
@@ -295,9 +295,9 @@
           @if($actor->image)
             <div class="mt-2 inline-block transform hover:scale-110">
               <div class="h-20 w-20 overflow-hidden rounded">
-                <img src="{{ Storage::url($actor->image) }}"
-                     alt="{{ $actor->first_name }} {{ $actor->last_name }}"
-                     class="h-full w-full object-cover" />
+                <img src="{{ $actor->profile_image_url }}"
+                    alt="{{ $actor->first_name }} {{ $actor->last_name }}"
+                    class="h-full w-full object-cover" />
               </div>
             </div>
           @endif

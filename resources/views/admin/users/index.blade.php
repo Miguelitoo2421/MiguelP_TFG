@@ -41,11 +41,11 @@
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
                 <x-secondary-button style="link"
                   @click="$dispatch('open-modal','edit-user-{{ $user->id }}')">
-                  {{ __('Edit') }}
+                  {{ __('✏️') }}
                 </x-secondary-button>
                 <x-danger-button class="ml-2"
                   @click.prevent="$dispatch('open-modal','confirm-delete-{{ $user->id }}')">
-                  {{ __('Delete') }}
+                  {{ __('⛌') }}
                 </x-danger-button>
               </td>
             </tr>
