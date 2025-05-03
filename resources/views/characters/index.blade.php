@@ -26,6 +26,11 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           @foreach($characters as $character)
+            @php
+              $deleteModal = $character->plays->count() > 0
+                  ? "cannot-delete-character-{$character->id}"
+                  : "confirm-delete-character-{$character->id}";
+            @endphp
             <tr>
               {{-- Imagen --}}
               <td class="px-6 py-4 whitespace-nowrap">
@@ -57,7 +62,7 @@
                   ✏️
                 </x-secondary-button>
                 <x-danger-button class="ml-2"
-                  @click.prevent="$dispatch('open-modal','confirm-delete-character-{{ $character->id }}')">
+                  @click.prevent="$dispatch('open-modal', '{{ $deleteModal }}')">
                   ⛌
                 </x-danger-button>
               </td>
@@ -138,23 +143,26 @@
       </x-modal-form>
     @endforeach
 
-    {{-- Modal: Confirmar eliminación --}}
+    {{-- Modals reutilizables --}}
     @foreach($characters as $character)
-      <x-modal name="confirm-delete-character-{{ $character->id }}" focusable>
-        <form action="{{ route('characters.destroy', $character) }}" method="POST" class="p-6">
-          @csrf @method('DELETE')
-          <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Are you sure you want to delete ":name"?', ['name' => $character->name]) }}
-          </h2>
-          <div class="mt-4 flex justify-end space-x-2">
-            <x-secondary-button @click="$dispatch('close-modal','confirm-delete-character-{{ $character->id }}')">
-              {{ __('Cancel') }}
-            </x-secondary-button>
-            <x-danger-button type="submit">{{ __('Delete') }}</x-danger-button>
-          </div>
-        </form>
-      </x-modal>
-    @endforeach
+      @php
+        $modalId = "confirm-delete-character-{$character->id}";
+        $modalName = $character->name;
+      @endphp
 
+      @if($character->plays->count() > 0)
+      <x-cannot-delete
+        :modal-id="'cannot-delete-character-' . $character->id"
+        :name="$character->name"
+        :message="__('This character is assigned to one or more plays and cannot be deleted.')"
+      />
+      @else
+        <x-confirm-delete
+          :modal-id="$modalId"
+          :name="$modalName"
+          :route="route('characters.destroy', $character)"
+        />
+      @endif
+    @endforeach
   </x-wrapper-views>
 </x-app-layout>

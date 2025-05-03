@@ -46,10 +46,16 @@ class Character extends Model
     }
 
     public function getImageUrlAttribute()
-{
-    return $this->image
-        ? asset('storage/' . $this->image)
-        : asset('storage/characters/image_user.png');
-}
+    {
+        return $this->image
+            ? asset('storage/' . $this->image)
+            : asset('storage/characters/image_user.png');
+    }
+
+    public function isUsedInPlays(): bool
+    {
+        return $this->plays()->exists();
+    }
+
 
 }

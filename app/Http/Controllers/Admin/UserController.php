@@ -83,6 +83,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if ($user->hasRole('admin')) {
+            return back()->with('error', "No se puede eliminar al usuario administrador: {$user->name}.");
+        }
+
         $user->delete();
 
         return back()->with('success', "Usuario {$user->name} eliminado.");

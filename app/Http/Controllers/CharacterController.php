@@ -14,7 +14,9 @@ class CharacterController extends Controller
 
     public function index()
     {
-        $characters = Character::orderBy('name')->paginate(15);
+        $characters = Character::with('plays')
+        ->orderBy('name')
+        ->paginate(15);
 
         return view('characters.index', compact('characters'));
     }
@@ -55,6 +57,14 @@ class CharacterController extends Controller
 
     public function destroy(Character $character)
     {
+        if ($character->plays()->exists()) {
+            return back()->with([
+                'delete_error_id' => $character->id,
+                'delete_error_message' => __('This character is used in at least one play and cannot be deleted.'),
+            ]);
+        }
+
+
         $character->delete();
 
         return back()->with('success', __('Character deleted.'));

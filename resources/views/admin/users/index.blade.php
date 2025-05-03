@@ -107,23 +107,12 @@
   
       {{-- Modales de confirmación de borrado --}}
       @foreach($users as $user)
-        <x-modal name="confirm-delete-{{ $user->id }}" focusable>
-          <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="p-6">
-            @csrf @method('DELETE')
-  
-            <h2 class="text-lg font-medium text-gray-900">
-              {{ __('Are you sure you want to delete :name?', ['name' => $user->name]) }}
-            </h2>
-  
-            <div class="mt-4 flex justify-end space-x-2">
-              <x-secondary-button
-                @click="$dispatch('close-modal','confirm-delete-{{ $user->id }}')">
-                {{ __('Cancel') }}
-              </x-secondary-button>
-              <x-danger-button type="submit">{{ __('Delete') }}</x-danger-button>
-            </div>
-          </form>
-        </x-modal>
+        <x-confirm-delete
+        :modalId="'confirm-delete-' . $user->id"
+        :name="$user->name"
+        :route="route('admin.users.destroy', $user)"
+        :warning="$user->hasRole('admin') ? __('Administrators cannot be deleted.') : null"
+      />
       @endforeach
   
       {{-- Modal de creación --}}
