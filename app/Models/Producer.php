@@ -33,11 +33,12 @@ class Producer extends Model
         return $this->hasMany(Play::class);
     }
 
-    public function getProfileImageUrlAttribute(): string
+    public function getImageUrlAttribute(): string
     {
         return $this->image
             ? Storage::url($this->image)
             : asset('storage/producers/image_user.png');
     }
+
 
 }

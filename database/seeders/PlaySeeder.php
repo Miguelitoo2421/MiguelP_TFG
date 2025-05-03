@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\{Play, Producer, Character};
+use App\Models\{Play, Producer};
 
 class PlaySeeder extends Seeder
 {
@@ -15,12 +15,11 @@ class PlaySeeder extends Seeder
             return;
         }
 
-        // Crear dos obras
         $plays = [
             [
                 'name'        => 'The Avengers',
                 'active'      => true,
-                'notes'       => 'action film about the beginning of the Avengers.',
+                'notes'       => 'Action film about the beginning of the Avengers.',
                 'image'       => 'plays/play_avengers.jpg',
                 'producer_id' => $producer->id,
             ],
@@ -34,15 +33,7 @@ class PlaySeeder extends Seeder
         ];
 
         foreach ($plays as $playData) {
-            $play = Play::create($playData);
-
-            // Tomar algunos personajes aleatorios y vincularlos a la obra
-            $characters = Character::inRandomOrder()->take(3)->get();
-
-            foreach ($characters as $character) {
-                // Agregamos a tabla pivote character_play
-                $play->characters()->attach($character->id);
-            }
+            Play::create($playData);
         }
     }
 }
