@@ -8,6 +8,7 @@ use App\Http\Controllers\ProducerController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\ActorController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,7 @@ Route::prefix('admin')
          Route::resource('characters', CharacterController::class);
          Route::resource('actors',     ActorController::class);
          Route::resource('locations',  LocationController::class);
+         Route::resource('events',     EventController::class);
      });
 
 require __DIR__.'/auth.php';

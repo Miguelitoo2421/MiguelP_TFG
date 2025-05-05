@@ -45,4 +45,10 @@ return [
         'roles' => ['admin', 'user'],
     ],
 
+    [
+        'name'  => 'Events',
+        'route' => 'events.index',
+        'roles' => ['admin', 'user'],
+    ],
+
 ];

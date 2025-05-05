@@ -13,7 +13,7 @@
     </x-slot>
 
     <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
+      <table class="min-w-full divide-y divide-gray-200 table-fixed">
         <thead class="bg-gray-50">
           <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Photo') }}</th>
@@ -26,7 +26,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Drive') }}</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Active') }}</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Notes') }}</th>
-            <th class="px-6 py-3"></th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase w-32"></th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -43,11 +43,11 @@
                   </div>
                 </div>
               </td>
-              <td class="px-6 py-4 text-base text-gray-900">{{ $actor->first_name }}</td>
-              <td class="px-6 py-4 text-base text-gray-900">{{ $actor->last_name }}</td>
-              <td class="px-6 py-4 text-base text-gray-900">{{ $actor->phone ?? '—' }}</td>
-              <td class="px-6 py-4 text-base text-gray-900">{{ $actor->email ?? '—' }}</td>
-              <td class="px-6 py-4 text-base text-gray-900">{{ $actor->city ?? '—' }}</td>
+              <td class="px-6 py-4 text-base text-gray-900 truncate">{{ $actor->first_name }}</td>
+              <td class="px-6 py-4 text-base text-gray-900 truncate">{{ $actor->last_name }}</td>
+              <td class="px-6 py-4 text-base text-gray-900 truncate">{{ $actor->phone ?? '—' }}</td>
+              <td class="px-6 py-4 text-base text-gray-900 truncate">{{ $actor->email ?? '—' }}</td>
+              <td class="px-6 py-4 text-base text-gray-900 truncate">{{ $actor->city ?? '—' }}</td>
               <td class="px-6 py-4 text-base text-gray-900">{!! $actor->has_car ? '✅' : '❌' !!}</td>
               <td class="px-6 py-4 text-base text-gray-900">{!! $actor->can_drive ? '✅' : '❌' !!}</td>
               <td class="px-6 py-4 text-base text-gray-900">{!! $actor->active ? '✅' : '❌' !!}</td>
@@ -55,8 +55,15 @@
                 <span class="cursor-pointer" title="{{ $actor->notes ?: '...' }}">📝</span>
               </td>
               <td class="px-6 py-4 text-right">
-                <x-secondary-button style="link" @click="$dispatch('open-modal','edit-actor-{{ $actor->id }}')">✏️</x-secondary-button>
-                <x-danger-button class="ml-2" @click.prevent="$dispatch('open-modal','confirm-delete-actor-{{ $actor->id }}')">⛌</x-danger-button>
+                <div class="inline-flex items-center space-x-2 whitespace-nowrap w-32">
+                  <x-secondary-button
+                    style="link"
+                    @click="$dispatch('open-modal','edit-actor-{{ $actor->id }}')"
+                  >✏️</x-secondary-button>
+                  <x-danger-button
+                    @click.prevent="$dispatch('open-modal','confirm-delete-actor-{{ $actor->id }}')"
+                  >⛌</x-danger-button>
+                </div>
               </td>
             </tr>
           @endforeach
