@@ -267,22 +267,11 @@
 
     {{-- Modals: Confirm Delete --}}
     @foreach($plays as $play)
-      <x-modal name="confirm-delete-play-{{ $play->id }}" focusable>
-        <form method="POST" action="{{ route('plays.destroy', $play) }}" class="p-6">
-          @csrf @method('DELETE')
-          <h2 class="text-lg font-medium text-gray-900">
-            {{ __("Are you sure you want to delete “{$play->name}”?") }}
-          </h2>
-          <div class="mt-4 flex justify-end space-x-2">
-            <x-secondary-button
-              @click="$dispatch('close-modal','confirm-delete-play-{{ $play->id }}')">
-              {{ __('Cancel') }}
-            </x-secondary-button>
-            <x-danger-button type="submit">{{ __('Delete') }}</x-danger-button>
-          </div>
-        </form>
-      </x-modal>
+      <x-confirm-delete
+        :modalId="'confirm-delete-play-' . $play->id"
+        :name="$play->name"
+        :route="route('plays.destroy', $play)"
+      />
     @endforeach
-
   </x-wrapper-views>
 </x-app-layout>

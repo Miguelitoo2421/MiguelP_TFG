@@ -9,6 +9,10 @@
       {{ __('Are you sure you want to delete ":name"?', ['name' => $name]) }}
     </h2>
 
+    <p class="mt-4 text-sm text-gray-600">
+      {{ __('This field will be permanently removed.') }}
+    </p>
+
     @if($warning)
       <p class="mt-4 text-sm text-red-600 font-semibold">
         {{ $warning }}

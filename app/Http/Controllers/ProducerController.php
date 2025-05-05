@@ -78,12 +78,21 @@ class ProducerController extends Controller
      */
     public function destroy(Producer $producer)
     {
+        // Evita borrar si hay obras relacionadas
+        if ($producer->plays()->exists()) {
+            return back()->with([
+                'cannot_delete_id' => $producer->id,
+                'cannot_delete_message' => __('This producer is assigned to one or more plays and cannot be deleted.'),
+            ]);
+        }
+
+        // Eliminar imagen si existe
         if ($producer->image && Storage::disk('public')->exists($producer->image)) {
             Storage::disk('public')->delete($producer->image);
         }
 
         $producer->delete();
 
-        return back()->with('success', 'Productora eliminada correctamente.');
+        return back()->with('success', __('Producer deleted successfully.'));
     }
 }

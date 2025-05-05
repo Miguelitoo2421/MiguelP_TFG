@@ -6,62 +6,48 @@
     </x-slot>
 
     <x-wrapper-views x-data>
-        {{-- Action: New Producer --}}
+        {{-- Acción: Nueva productora --}}
         <x-slot name="actions">
             <x-primary-button @click="$dispatch('open-modal','create-producer')">
                 {{ __('New Producer') }}
             </x-primary-button>
         </x-slot>
 
-        {{-- Producers table --}}
+        {{-- Tabla de productoras --}}
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                            {{ __('IMAGE') }}
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                            {{ __('Name') }}
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                            {{ __('Tax ID') }}
-                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Image') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Name') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Tax ID') }}</th>
                         <th class="px-6 py-3"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach($producers as $producer)
+                        @php
+                            $hasPlays = $producer->plays()->exists();
+                            $modalId = $hasPlays
+                                ? 'cannot-delete-producer-' . $producer->id
+                                : 'confirm-delete-producer-' . $producer->id;
+                        @endphp
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="inline-block transform transition duration-150 ease-in-out hover:scale-125">
                                     <div class="h-16 w-16 overflow-hidden rounded">
-                                        <img
-                                            src="{{ $producer->image_url }}"
-                                            alt="{{ $producer->name }}"
-                                            class="h-full w-full object-cover"
-                                        />
+                                        <img src="{{ $producer->image_url }}" alt="{{ $producer->name }}" class="h-full w-full object-cover" />
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-900">
-                                {{ $producer->name }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-900">
-                                {{ $producer->cif }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <x-secondary-button
-                                    style="link"
-                                    @click="$dispatch('open-modal','edit-producer-{{ $producer->id }}')"
-                                >
-                                    {{ __('✏️') }}
+                            <td class="px-6 py-4 text-gray-900">{{ $producer->name }}</td>
+                            <td class="px-6 py-4 text-gray-900">{{ $producer->cif }}</td>
+                            <td class="px-6 py-4 text-right">
+                                <x-secondary-button style="link" @click="$dispatch('open-modal','edit-producer-{{ $producer->id }}')">
+                                    ✏️
                                 </x-secondary-button>
-                                <x-danger-button
-                                    class="ml-2"
-                                    @click.prevent="$dispatch('open-modal','delete-producer-{{ $producer->id }}')"
-                                >
-                                    {{ __('⛌') }}
+                                <x-danger-button class="ml-2" @click.prevent="$dispatch('open-modal','{{ $modalId }}')">
+                                    ⛌
                                 </x-danger-button>
                             </td>
                         </tr>
@@ -70,12 +56,12 @@
             </table>
         </div>
 
-        {{-- Pagination --}}
+        {{-- Paginación --}}
         <div class="mt-4">
             {{ $producers->links() }}
         </div>
 
-        {{-- Modal: Create Producer --}}
+        {{-- Modal: Crear --}}
         <x-modal-form
             modal-name="create-producer"
             max-width="md"
@@ -98,7 +84,7 @@
             <x-input-error :messages="$errors->get('image')" class="mt-2" />
         </x-modal-form>
 
-        {{-- Modals: Edit Producer --}}
+        {{-- Modales: Editar --}}
         @foreach($producers as $producer)
             <x-modal-form
                 modal-name="edit-producer-{{ $producer->id }}"
@@ -132,43 +118,31 @@
                 <x-input-error :messages="$errors->get('cif')" class="mt-2" />
 
                 <x-input-label for="image-{{ $producer->id }}" :value="__('Image')" />
-                <input
-                    id="image-{{ $producer->id }}"
-                    name="image"
-                    type="file"
-                    class="mt-1 block w-full"
-                />
+                <input id="image-{{ $producer->id }}" name="image" type="file" class="mt-1 block w-full" />
                 <div class="mt-2 inline-block transform transition duration-150 ease-in-out hover:scale-125">
                     <div class="h-20 w-20 overflow-hidden rounded">
-                        <img
-                            src="{{ $producer->image_url }}"
-                            alt="{{ $producer->name }}"
-                            class="h-full w-full object-cover"
-                        />
+                        <img src="{{ $producer->image_url }}" alt="{{ $producer->name }}" class="h-full w-full object-cover" />
                     </div>
                 </div>
                 <x-input-error :messages="$errors->get('image')" class="mt-2" />
             </x-modal-form>
         @endforeach
 
-        {{-- Modals: Confirm Delete --}}
+        {{-- Modales: Confirmar o advertir eliminación --}}
         @foreach($producers as $producer)
-            <x-modal name="delete-producer-{{ $producer->id }}" focusable>
-                <form method="POST" action="{{ route('producers.destroy', $producer) }}" class="p-6">
-                    @csrf @method('DELETE')
-
-                    <h2 class="text-lg font-medium text-gray-900">
-                        {{ __('Are you sure you want to delete :name?', ['name' => $producer->name]) }}
-                    </h2>
-
-                    <div class="mt-4 flex justify-end space-x-2">
-                        <x-secondary-button @click="$dispatch('close-modal','delete-producer-{{ $producer->id }}')">
-                            {{ __('Cancel') }}
-                        </x-secondary-button>
-                        <x-danger-button type="submit">{{ __('Delete') }}</x-danger-button>
-                    </div>
-                </form>
-            </x-modal>
+            @if($producer->plays()->exists())
+                <x-cannot-delete
+                    :modalId="'cannot-delete-producer-' . $producer->id"
+                    :name="$producer->name"
+                    message="{{ __('This producer is assigned to one or more plays and cannot be deleted.') }}"
+                />
+            @else
+                <x-confirm-delete
+                    :modalId="'confirm-delete-producer-' . $producer->id"
+                    :name="$producer->name"
+                    :route="route('producers.destroy', $producer)"
+                />
+            @endif
         @endforeach
     </x-wrapper-views>
 </x-app-layout>

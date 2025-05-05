@@ -53,10 +53,11 @@ class Actor extends Model
                     ->withTimestamps();
     }
 
-    public function getProfileImageUrlAttribute(): string
+    public function getImageUrlAttribute(): string
     {
         return $this->image
             ? Storage::url($this->image)
             : asset('storage/actors/image_user.png');
     }
+
 }

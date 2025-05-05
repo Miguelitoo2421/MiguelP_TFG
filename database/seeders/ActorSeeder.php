@@ -11,19 +11,19 @@ class ActorSeeder extends Seeder
     {
         $actors = [
             [
-                'first_name' => 'Robert',
-                'last_name'  => 'Downey Jr.',
+                'first_name' => 'Thiago',
+                'last_name'  => 'Matheus.',
                 'phone'      => '123456789',
-                'email'      => 'rdj@example.com',
+                'email'      => 't@example.com',
                 'city'       => 'Los Angeles',
                 'has_car'    => true,
                 'can_drive'  => true,
                 'active'     => true,
                 'notes'      => 'Actor de Iron Man',
-                'image'      => 'actors/robert.jpg',
+                'image'      => 'actors/image_user.png',
             ],
             [
-                'first_name' => 'Chris',
+                'first_name' => 'Azai',
                 'last_name'  => 'Hemsworth',
                 'phone'      => '987654321',
                 'email'      => 'chris@example.com',
@@ -32,7 +32,7 @@ class ActorSeeder extends Seeder
                 'can_drive'  => true,
                 'active'     => true,
                 'notes'      => 'Actor de Thor',
-                'image'      => 'actors/chris.jpg',
+                'image'      => 'actors/image_user.png',
             ],
             // Puedes añadir más si deseas
         ];
