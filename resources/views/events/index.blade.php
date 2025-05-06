@@ -6,7 +6,10 @@
     </h2>
   </x-slot>
 
-  <x-wrapper-views x-data>
+  <x-wrapper-views
+    x-data="{ openId: null }"
+    @keydown.escape.window="openId = null"
+  >
     <x-slot name="actions">
       <x-primary-button @click="$dispatch('open-modal','create-event')">
         {{ __('New Event') }}
@@ -16,7 +19,18 @@
     {{-- Grid de tarjetas --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       @foreach($events as $event)
-        <x-card-event :event="$event" />
+        {{-- Card clicable --}}
+        <div class="cursor-pointer" @click="openId = {{ $event->id }}">
+          <x-card-event :event="$event" />
+        </div>
+
+        {{-- Modal detalle inline --}}
+        <x-event-detail-modal
+          :event="$event"
+          :actors="$actors"
+          x-show="openId === {{ $event->id }}"
+          @click.self="openId = null"
+        />
       @endforeach
     </div>
 
@@ -59,6 +73,7 @@
 
     {{-- Modales Editar y Eliminar --}}
     @foreach($events as $event)
+      {{-- Editar Evento --}}
       <x-modal-form
         modal-name="edit-event-{{ $event->id }}"
         max-width="md"
@@ -118,9 +133,9 @@
           :value="old('scheduled_at', $event->scheduled_at->format('Y-m-d\TH:i'))"
           required
         />
-
       </x-modal-form>
 
+      {{-- Confirmar Eliminación --}}
       <x-confirm-delete
         :modal-id="'confirm-delete-event-'.$event->id"
         :name="$event->title"

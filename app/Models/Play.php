@@ -53,4 +53,9 @@ class Play extends Model
         // Ruta a un placeholder opcional
         return asset('images/placeholder.png');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
 }

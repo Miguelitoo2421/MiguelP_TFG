@@ -2,7 +2,7 @@
 @props(['event'])
 
 
-<div {{ $attributes->merge(['class'=>'bg-white shadow rounded-lg overflow-hidden']) }}>
+<div {{ $attributes->merge(['class'=>'bg-white shadow rounded-lg overflow-hidden cursor-pointer transform transition duration-200 hover:scale-105']) }}>
   <div class="h-48 bg-gray-100">
     <img
       src="{{ $event->play->image_url }}"
@@ -25,11 +25,11 @@
       <x-secondary-button
         size="sm"
         style="link"
-        @click="$dispatch('open-modal','edit-event-{{ $event->id }}')"
+        @click.stop="$dispatch('open-modal','edit-event-{{ $event->id }}')"
       >✏️</x-secondary-button>
       <x-danger-button
         size="sm"
-        @click.prevent="$dispatch('open-modal','confirm-delete-event-{{ $event->id }}')"
+        @click.stop.prevent="$dispatch('open-modal','confirm-delete-event-{{ $event->id }}')"
       >⛌</x-danger-button>
     </div>
   </div>

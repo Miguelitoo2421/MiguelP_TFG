@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Play;
 use App\Models\Location;
+use App\Models\Actor;
 use Illuminate\Http\Request;
 
 
@@ -14,22 +15,18 @@ class EventController extends Controller
 {
     public function index()
     {
-        // Obtén los eventos paginados
-        $events = Event::with(['play', 'location'])
-                      ->orderBy('scheduled_at', 'desc')
-                      ->paginate(12);
-
-        // Añade estas dos líneas:
-        $plays     = Play::where('active', true)->get();
+        $events    = Event::with(['play.characters','location'])
+                          ->orderBy('scheduled_at','desc')
+                          ->paginate(12);
+        $plays     = Play::active()->with('characters')->get();
         $locations = Location::where('active', true)->get();
-
-        // Ahora sí le pasamos todo a la vista:
-        return view('events.index', compact('events','plays','locations'));
+        $actors    = Actor::all();             // ← Lo nuevo
+        return view('events.index', compact('events','plays','locations','actors'));
     }
 
     public function create()
     {
-        $plays     = Play::active()->get();      // supongamos scopeActive
+        $plays     = Play::active()->with('characters')->get();      
         $locations = Location::where('active', true)->get();
 
         return view('events.create', compact('plays','locations'));
@@ -52,7 +49,7 @@ class EventController extends Controller
 
     public function edit(Event $event)
     {
-        $plays     = Play::active()->get();
+        $plays     = Play::active()->with('characters')->get();
         $locations = Location::where('active', true)->get();
 
         return view('events.edit', compact('event','plays','locations'));
