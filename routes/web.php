@@ -9,6 +9,7 @@ use App\Http\Controllers\PlayController;
 use App\Http\Controllers\ActorController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventCastController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,8 @@ Route::prefix('admin')
          Route::resource('actors',     ActorController::class);
          Route::resource('locations',  LocationController::class);
          Route::resource('events',     EventController::class);
+         Route::post('events/{event}/casts', [EventCastController::class, 'store'])
+              ->name('events.casts.store');
      });
 
 require __DIR__.'/auth.php';

@@ -28,4 +28,9 @@ class Event extends Model
     {
         return $this->belongsTo(Location::class);
     }
+
+    public function actorCharacters()
+    {
+        return $this->hasMany(\App\Models\ActorCharacter::class);
+    }
 }

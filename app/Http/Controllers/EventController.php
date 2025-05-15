@@ -10,17 +10,23 @@ use App\Models\Location;
 use App\Models\Actor;
 use Illuminate\Http\Request;
 
-
 class EventController extends Controller
 {
     public function index()
     {
-        $events    = Event::with(['play.characters','location'])
-                          ->orderBy('scheduled_at','desc')
-                          ->paginate(12);
+        // Cargamos eventos con relaciones necesarias, incluyendo los casts y sus actores
+        $events = Event::with([
+            'play.characters',
+            'location',
+            'actorCharacters.actor'
+        ])
+        ->orderBy('scheduled_at', 'desc')
+        ->paginate(12);
+
         $plays     = Play::active()->with('characters')->get();
         $locations = Location::where('active', true)->get();
-        $actors    = Actor::all();             // ← Lo nuevo
+        $actors    = Actor::all();
+
         return view('events.index', compact('events','plays','locations','actors'));
     }
 
