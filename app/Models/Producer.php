@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class Producer extends Model
 {
@@ -30,4 +32,13 @@ class Producer extends Model
     {
         return $this->hasMany(Play::class);
     }
+
+    public function getImageUrlAttribute(): string
+    {
+        return $this->image
+            ? Storage::url($this->image)
+            : asset('storage/producers/image_user.png');
+    }
+
+
 }

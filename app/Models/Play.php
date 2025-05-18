@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Producer;
 use App\Models\Character;
+use Illuminate\Support\Facades\Storage;
 
 class Play extends Model
 {
@@ -41,5 +42,20 @@ class Play extends Model
     {
         return $this->belongsToMany(Character::class, 'character_play')
                     ->withTimestamps();
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->image) {
+            // Esto devuelve "/storage/plays/tu_fichero.jpg"
+            return Storage::url($this->image);
+        }
+        // Ruta a un placeholder opcional
+        return asset('images/placeholder.png');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
     }
 }

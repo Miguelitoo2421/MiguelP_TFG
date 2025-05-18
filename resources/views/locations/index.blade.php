@@ -50,11 +50,11 @@
               <td class="px-6 py-4 whitespace-nowrap text-right">
                 <x-secondary-button style="link"
                   @click="$dispatch('open-modal','edit-location-{{ $location->id }}')">
-                  {{ __('Edit') }}
+                  {{ __('✏️') }}
                 </x-secondary-button>
                 <x-danger-button class="ml-2"
                   @click.prevent="$dispatch('open-modal','confirm-delete-location-{{ $location->id }}')">
-                  {{ __('Delete') }}
+                  {{ __('⛌') }}
                 </x-danger-button>
               </td>
             </tr>

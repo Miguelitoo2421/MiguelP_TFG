@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use App\Models\ActorCharacter;
 use App\Models\Character;
 
@@ -24,7 +26,7 @@ class Actor extends Model
         'has_car',
         'can_drive',
         'active',
-        'image',    // ruta o URL de la imagen
+        'image',   
         'notes',
     ];
 
@@ -50,4 +52,12 @@ class Actor extends Model
                     ->withPivot('mastery_level', 'notes')
                     ->withTimestamps();
     }
+
+    public function getImageUrlAttribute(): string
+    {
+        return $this->image
+            ? Storage::url($this->image)
+            : asset('storage/actors/image_user.png');
+    }
+
 }

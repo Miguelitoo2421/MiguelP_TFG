@@ -7,11 +7,11 @@
     {{ $attributes->merge([
       'class' => trim("
         relative transform transition-transform ease-in-out duration-150
-        /* Estado inicial: adelantado fuera del hueco */
-        -translate-y-1 -translate-x-1
-        /* Al hover: vuelve a posición original (entra en el hueco) */
-        hover:translate-y-0 hover:translate-x-0
-        w-full h-full
+         -translate-y-1 -translate-x-1      /* estado inicial adelantado */
+         hover:translate-y-0 hover:translate-x-0    /* hover: entra al hueco */
+         active:-translate-y-1 active:-translate-x-1 /* active: vuelve arriba */
+         w-full h-full cursor-pointer
+         focus:outline-none focus:ring-2 focus:ring-blue-500
       ")
     ]) }}
     viewBox="0 0 1280 1280"

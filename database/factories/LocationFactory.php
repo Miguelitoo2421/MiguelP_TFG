@@ -19,7 +19,6 @@ class LocationFactory extends Factory
             'street_name' => $this->faker->streetName,
             'street_number'=> $this->faker->buildingNumber,
             'postal_code'=> $this->faker->postcode,
-            'url_map'     => null,
             'phone'       => $this->faker->phoneNumber,
             'active'      => true,
             'notes'       => $this->faker->sentence,
