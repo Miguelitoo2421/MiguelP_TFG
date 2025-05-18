@@ -26,8 +26,22 @@ class PlaySeeder extends Seeder
             [
                 'name'        => 'Avengers Live',
                 'active'      => true,
-                'notes'       => 'Adaptación teatral del universo Marvel.',
+                'notes'       => 'Action film about the beginning of the Avengers.',
                 'image'       => 'plays/play_cap_america.jpg',
+                'producer_id' => $producer->id,
+            ],
+            [
+                'name'        => 'Lord Of The Ring',
+                'active'      => true,
+                'notes'       => 'Theatrical adaptation of J.R.R Tolkiens wolrld.',
+                'image'       => 'plays/lord-of-the-ring.png',
+                'producer_id' => $producer->id,
+            ],
+            [
+                'name'        => 'Lion King',
+                'active'      => true,
+                'notes'       => 'Theatrical adaptation of Lion King.',
+                'image'       => 'plays/rey-leon.jpg',
                 'producer_id' => $producer->id,
             ],
         ];

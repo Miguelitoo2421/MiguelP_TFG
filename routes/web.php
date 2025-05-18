@@ -11,13 +11,18 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCastController;
 use App\Http\Controllers\DashboardController;
+use App\Models\Event;
 
 /*
 |--------------------------------------------------------------------------
 | RUTAS PÚBLICAS y PERFIL
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn() => view('welcome'));
+Route::get('/', function() {
+    return view('welcome', [
+        'events' => Event::with(['play', 'location'])->orderBy('scheduled_at')->take(5)->get()
+    ]);
+});
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
 ->middleware(['auth', 'verified'])
