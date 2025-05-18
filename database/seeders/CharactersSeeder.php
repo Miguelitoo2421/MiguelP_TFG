@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\{Play, Actor, Character};
+use App\Models\{Play, Character};
 use Illuminate\Database\Seeder;
 
 class CharactersSeeder extends Seeder
@@ -10,10 +10,9 @@ class CharactersSeeder extends Seeder
     public function run(): void
     {
         $play = Play::first();
-        $actor = Actor::first();
 
-        if (! $play || ! $actor) {
-            $this->command->warn('Play o Actor no existen. Ejecuta los seeders correspondientes primero.');
+        if (!$play) {
+            $this->command->warn('Play no existe. Ejecuta los seeders correspondientes primero.');
             return;
         }
 
@@ -27,15 +26,10 @@ class CharactersSeeder extends Seeder
         ];
 
         foreach ($marvelCharacters as $data) {
-            $character = Character::create([
+            Character::create([
                 'name'  => $data['name'],
                 'notes' => $data['notes'],
                 'image' => $data['image'],
-            ]);
-
-            $actor->characters()->attach($character->id, [
-                'mastery_level' => rand(5, 10),
-                'notes'         => 'Personaje Marvel asignado automáticamente.',
             ]);
         }
     }

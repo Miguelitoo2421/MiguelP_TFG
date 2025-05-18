@@ -38,69 +38,84 @@
       Lugar: {{ $event->location->city }}@if($event->location->province), {{ $event->location->province }}@endif
     </p>
 
-    <div class="mt-6 space-y-6">
-      @foreach($event->play->characters as $character)
-        <div class="border p-4 rounded">
-          <p class="font-semibold mb-2">{{ $character->name }}</p>
-
-          {{-- Buscador autocompletado --}}
-          <input
-            type="text"
-            x-model="searchQueries[{{ $character->id }}]"
-            placeholder="Buscar actor…"
-            class="mt-1 block w-full border rounded p-2"
-            @input.debounce.300ms="
-              casts[{{ $character->id }}].suggestions =
-                getSuggestions(searchQueries[{{ $character->id }}]);
-            "
-          />
-          <ul
-            x-show="casts[{{ $character->id }}].suggestions.length"
-            class="border bg-white mt-1 max-h-32 overflow-auto"
-          >
-            <template x-for="actor in casts[{{ $character->id }}].suggestions" :key="actor.id">
-              <li
-                @click.prevent="
-                  casts[{{ $character->id }}].actor_id = actor.id;
-                  casts[{{ $character->id }}].suggestions = [];
-                  searchQueries[{{ $character->id }}] = '';
-                "
-                class="px-3 py-1 hover:bg-gray-100 cursor-pointer"
-                x-text="`${actor.first_name} ${actor.last_name}`"
-              ></li>
-            </template>
-          </ul>
-
-          {{-- Notas --}}
-          <div class="mt-4">
-            <input
-              type="text"
-              x-model="casts[{{ $character->id }}].notes"
-              placeholder="Notas"
-              class="w-full border rounded p-2"
-            />
-          </div>
-
-          {{-- Mostrar actor seleccionado separado --}}
-          <template x-if="casts[{{ $character->id }}].actor_id">
-            <p class="mt-2 text-sm text-gray-700">
-              selected actor: 
-              <span x-text="(() => {
-                const a = actors.find(x => x.id === casts[{{ $character->id }}].actor_id);
-                return a ? `${a.first_name} ${a.last_name}` : '';
-              })()"></span>
-            </p>
-          </template>
+    <div class="mt-6">
+      <h3 class="text-xl font-semibold mb-4">Characters</h3>
+      
+      @if($event->play->characters->isEmpty())
+        <div class="text-center py-8 bg-gray-50 rounded-lg">
+          <a href="{{ route('plays.index') }}">
+            <x-primary-button>
+              Add characters
+            </x-primary-button>
+          </a>
         </div>
-      @endforeach
+      @else
+        <div class="space-y-6">
+          @foreach($event->play->characters as $character)
+            <div class="border p-4 rounded">
+              <p class="font-semibold mb-2">{{ $character->name }}</p>
+
+              {{-- Buscador autocompletado --}}
+              <input
+                type="text"
+                x-model="searchQueries[{{ $character->id }}]"
+                placeholder="Buscar actor…"
+                class="mt-1 block w-full border rounded p-2"
+                @input.debounce.300ms="
+                  casts[{{ $character->id }}].suggestions =
+                    getSuggestions(searchQueries[{{ $character->id }}]);
+                "
+              />
+              <ul
+                x-show="casts[{{ $character->id }}].suggestions.length"
+                class="border bg-white mt-1 max-h-32 overflow-auto"
+              >
+                <template x-for="actor in casts[{{ $character->id }}].suggestions" :key="actor.id">
+                  <li
+                    @click.prevent="
+                      casts[{{ $character->id }}].actor_id = actor.id;
+                      casts[{{ $character->id }}].suggestions = [];
+                      searchQueries[{{ $character->id }}] = '';
+                    "
+                    class="px-3 py-1 hover:bg-gray-100 cursor-pointer"
+                    x-text="`${actor.first_name} ${actor.last_name}`"
+                  ></li>
+                </template>
+              </ul>
+
+              {{-- Notas --}}
+              <div class="mt-4">
+                <input
+                  type="text"
+                  x-model="casts[{{ $character->id }}].notes"
+                  placeholder="Notas"
+                  class="w-full border rounded p-2"
+                />
+              </div>
+
+              {{-- Mostrar actor seleccionado separado --}}
+              <template x-if="casts[{{ $character->id }}].actor_id">
+                <p class="mt-2 text-sm text-gray-700">
+                  selected actor: 
+                  <span x-text="(() => {
+                    const a = actors.find(x => x.id === casts[{{ $character->id }}].actor_id);
+                    return a ? `${a.first_name} ${a.last_name}` : '';
+                  })()"></span>
+                </p>
+              </template>
+            </div>
+          @endforeach
+        </div>
+      @endif
     </div>
 
     <div class="mt-6 flex justify-end space-x-2">
-      <button
-        type="button"
-        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      <x-secondary-button
+        @click="openId = null"
+      >Cancel</x-secondary-button>
+      <x-primary-button
         @click.prevent="
-          fetch('{{ route("events.casts.store", $event) }}', {
+          fetch('{{ route('events.casts.store', $event) }}', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -111,12 +126,7 @@
             if (res.ok) location.reload();
           });
         "
-      >Guardar</button>
-      <button
-        type="button"
-        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-        @click="openId = null"
-      >Cerrar</button>
+      >Save</x-primary-button>
     </div>
   </div>
 </div>

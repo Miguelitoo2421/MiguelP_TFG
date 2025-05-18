@@ -109,4 +109,10 @@ class PlayController extends Controller
             ->route('plays.index')
             ->with('success', 'Play deleted successfully.');
     }
+
+    public function removeCharacter(Play $play, Character $character)
+    {
+        $play->characters()->detach($character->id);
+        return response()->json(['success' => true]);
+    }
 }

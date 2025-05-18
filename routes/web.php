@@ -3,13 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;    // CRUD de usuarios
-use App\Http\Controllers\CharacterController;     // controlador “plano” de Characters
+use App\Http\Controllers\CharacterController;     // controlador "plano" de Characters
 use App\Http\Controllers\ProducerController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\ActorController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCastController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,9 @@ use App\Http\Controllers\EventCastController;
 */
 Route::get('/', fn() => view('welcome'));
 
-Route::get('/dashboard', fn() => view('dashboard'))
-     ->middleware(['auth', 'verified'])
-     ->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+->middleware(['auth', 'verified'])
+->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile',   [ProfileController::class, 'edit'])->name('profile.edit');
@@ -62,5 +63,8 @@ Route::prefix('admin')
          Route::post('events/{event}/casts', [EventCastController::class, 'store'])
               ->name('events.casts.store');
      });
+
+Route::delete('/plays/{play}/characters/{character}', [PlayController::class, 'removeCharacter'])
+    ->name('plays.characters.remove');
 
 require __DIR__.'/auth.php';

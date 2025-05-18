@@ -58,15 +58,53 @@
               {{-- Personajes --}}
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 @if($play->characters->isNotEmpty())
-                  <div class="flex flex-wrap gap-1">
-                    @foreach($play->characters as $character)
-                      <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">
-                        {{ $character->name }}
+                  <div x-data="{ 
+                    isOpen: false,
+                    removeCharacter(playId, characterId) {
+                      fetch(`/plays/${playId}/characters/${characterId}`, {
+                        method: 'DELETE',
+                        headers: {
+                          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                      }).then(response => {
+                        if (response.ok) {
+                          window.location.reload();
+                        }
+                      });
+                    }
+                  }" class="relative">
+                    <div @click="isOpen = !isOpen" 
+                         class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                      <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">
+                        {{ $play->characters->first()->name }}
                       </span>
-                    @endforeach
+                      @if($play->characters->count() > 1)
+                        <svg :class="{'rotate-180': isOpen}" class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      @endif
+                    </div>
+
+                    {{-- Lista desplegable de characters --}}
+                    <div x-show="isOpen" 
+                         @click.away="isOpen = false"
+                         class="absolute z-10 left-0 mt-1 bg-white border rounded-md shadow-lg py-1 min-w-[200px]">
+                      @foreach($play->characters as $character)
+                        <div class="px-3 py-1 text-sm text-gray-700 flex justify-between items-center hover:bg-gray-50">
+                          {{ $character->name }}
+                          <button 
+                            @click.stop="removeCharacter({{ $play->id }}, {{ $character->id }})"
+                            class="text-red-500 hover:text-red-700"
+                            title="Eliminar personaje"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      @endforeach
+                    </div>
                   </div>
                 @else
-                  &mdash;
+                  <span class="text-gray-400">Characters</span>
                 @endif
               </td>
 
@@ -126,22 +164,51 @@
       </select>
       <x-input-error :messages="$errors->get('producer_id')" class="mt-2" />
 
-      {{-- Characters (checkboxes) --}}
-      <x-input-label :value="__('Characters')" class="mt-4" />
-      <fieldset class="grid grid-cols-2 gap-2 max-h-48 overflow-auto border rounded p-2">
-        @foreach($characters as $id => $name)
-          <label class="inline-flex items-center">
-            <input
-              type="checkbox"
-              name="characters[]"
-              value="{{ $id }}"
-              class="form-checkbox"
-            />
-            <span class="ml-2 text-gray-700">{{ $name }}</span>
-          </label>
-        @endforeach
-      </fieldset>
-      <x-input-error :messages="$errors->get('characters')" class="mt-2" />
+      {{-- Characters (desplegable) --}}
+      <div x-data="{ isOpen: false, selected: [] }" class="mt-4">
+        <x-input-label :value="__('Characters')" class="mb-1" />
+        
+        {{-- Área principal que siempre es visible --}}
+        <div class="relative">
+          <div @click="isOpen = !isOpen" 
+               class="w-full flex items-center justify-between p-2 border rounded-md cursor-pointer hover:bg-gray-50">
+            <div class="flex flex-wrap gap-2 min-h-[1.5rem]">
+              <template x-if="selected.length === 0">
+                <span class="text-gray-500">Selecciona personajes</span>
+              </template>
+              <template x-if="selected.length > 0">
+                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">
+                  <span x-text="selected.length"></span> seleccionados
+                </span>
+              </template>
+            </div>
+            <svg :class="{'rotate-180': isOpen}" class="w-5 h-5 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+
+          {{-- Lista desplegable de characters --}}
+          <div x-show="isOpen" 
+               @click.away="isOpen = false"
+               class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
+            <div class="p-2 grid grid-cols-1 gap-1">
+              @foreach($characters as $id => $name)
+                <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="characters[]"
+                    value="{{ $id }}"
+                    x-model="selected"
+                    class="form-checkbox rounded"
+                  />
+                  <span class="ml-2 text-gray-700">{{ $name }}</span>
+                </label>
+              @endforeach
+            </div>
+          </div>
+        </div>
+        <x-input-error :messages="$errors->get('characters')" class="mt-2" />
+      </div>
 
       {{-- Active --}}
       <x-input-label for="active" :value="__('Active')" class="mt-4" />
@@ -202,22 +269,50 @@
         </select>
         <x-input-error :messages="$errors->get('producer_id')" class="mt-2" />
 
-        {{-- Characters (checkboxes) --}}
-        <x-input-label :value="__('Characters')" class="mt-4" />
-        <fieldset class="grid grid-cols-2 gap-2 max-h-48 overflow-auto border rounded p-2">
-          @foreach($characters as $id => $name)
-            <label class="inline-flex items-center">
-              <input
-                type="checkbox"
-                name="characters[]"
-                value="{{ $id }}"
-                {{ in_array($id, old('characters', $play->characters->pluck('id')->toArray())) ? 'checked' : '' }}
-                class="form-checkbox"
-              />
-              <span class="ml-2 text-gray-700">{{ $name }}</span>
-            </label>
-          @endforeach
-        </fieldset>
+        {{-- Characters (desplegable) --}}
+        <div x-data="{ isOpen: false, selected: {{ json_encode(old('characters', $play->characters->pluck('id')->toArray())) }} }" class="mt-4">
+          <x-input-label :value="__('Characters')" class="mb-1" />
+          
+          {{-- Área principal que siempre es visible --}}
+          <div class="relative">
+            <div @click="isOpen = !isOpen" 
+                 class="w-full flex items-center justify-between p-2 border rounded-md cursor-pointer hover:bg-gray-50">
+              <div class="flex flex-wrap gap-2 min-h-[1.5rem]">
+                <template x-if="selected.length === 0">
+                  <span class="text-gray-500">Selecciona personajes</span>
+                </template>
+                <template x-if="selected.length > 0">
+                  <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">
+                    <span x-text="selected.length"></span> seleccionados
+                  </span>
+                </template>
+              </div>
+              <svg :class="{'rotate-180': isOpen}" class="w-5 h-5 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </div>
+
+            {{-- Lista desplegable de characters --}}
+            <div x-show="isOpen" 
+                 @click.away="isOpen = false"
+                 class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
+              <div class="p-2 grid grid-cols-1 gap-1">
+                @foreach($characters as $id => $name)
+                  <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="characters[]"
+                      value="{{ $id }}"
+                      x-model="selected"
+                      class="form-checkbox rounded"
+                    />
+                    <span class="ml-2 text-gray-700">{{ $name }}</span>
+                  </label>
+                @endforeach
+              </div>
+            </div>
+          </div>
+        </div>
         <x-input-error :messages="$errors->get('characters')" class="mt-2" />
 
         {{-- Active --}}
@@ -272,6 +367,17 @@
         :name="$play->name"
         :route="route('plays.destroy', $play)"
       />
+    @endforeach
+
+    {{-- Modals: Confirm Remove Character --}}
+    @foreach($plays as $play)
+      @foreach($play->characters as $character)
+        <x-confirm-delete
+          :modal-id="'confirm-remove-character-' . $play->id . '-' . $character->id"
+          :name="$character->name"
+          :route="route('plays.characters.remove', ['play' => $play->id, 'character' => $character->id])"
+        />
+      @endforeach
     @endforeach
   </x-wrapper-views>
 </x-app-layout>
