@@ -25,22 +25,19 @@
       letter-spacing: 0.05em;
     }
 
-    @keyframes marquee {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-50%);
-      }
-    }
-    
+    /* Estilos para marquee continuo */
     .animate-marquee {
-      animation: marquee 25s linear infinite;
+      display: flex;
+      white-space: nowrap;
+      will-change: transform;
     }
-
     .animate-marquee p {
       margin: 0 2rem;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
   </style>
 </head>
@@ -240,6 +237,31 @@
   <footer class="py-6 text-center text-white dark:text-white barber-font">
     © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
   </footer>
+
+  <!-- Script para marquee continuo -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const marquee = document.querySelector('.animate-marquee');
+    // duplicamos contenido para continuidad
+    marquee.innerHTML += marquee.innerHTML;
+
+    let pos = 0;
+    // velocidad en píxeles por frame (ajusta a tu gusto)
+    const speed = 0.4;
+
+    function tick() {
+      pos -= speed;
+      // reinicio suave cuando pasa media anchura
+      if (pos <= -marquee.scrollWidth / 2) {
+        pos = 0;
+      }
+      marquee.style.transform = `translateX(${pos}px)`;
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  });
+  </script>
 
 </body>
 </html>
