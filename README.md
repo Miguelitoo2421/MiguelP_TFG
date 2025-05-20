@@ -1,4 +1,4 @@
-# Gestión de Obras de Teatro Marvel
+# Marvel Plays
 _Un proyecto de TFG desarrollado en Laravel 12_
 
 <p align="center">
