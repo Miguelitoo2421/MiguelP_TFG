@@ -1,5 +1,5 @@
 # Gestión de Obras de Teatro Marvel
-_Un proyecto de TFG desarrollado en Laravel 11_
+_Un proyecto de TFG desarrollado en Laravel 12_
 
 <p align="center">
   <a href="https://laravel.com" target="_blank">
