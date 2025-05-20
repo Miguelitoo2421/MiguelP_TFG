@@ -10,7 +10,7 @@ _Un proyecto de TFG desarrollado en Laravel 11_
 ## Sobre el Proyecto
 
 Esta aplicación web tiene como objetivo gestionar obras de teatro inspiradas en el universo Marvel, permitiendo funciones de registro, login, gestión de perfiles y administración de obras.  
-Se desarrolló con **Laravel 11** y utiliza **Laravel Breeze** para la autenticación.
+Se desarrolló con **Laravel 12** y utiliza **Laravel Breeze** para la autenticación.
 
 ## Características
 
@@ -46,11 +46,13 @@ Se desarrolló con **Laravel 11** y utiliza **Laravel Breeze** para la autentica
 5. Generar la clave de la aplicación:
    php artisan key:generate
 
-6. Ejecutar migraciones y seeders (opcional):
+6. Ejecutar migraciones y seeders:
    php artisan migrate --seed
 
 7. Levantar el servidor de desarrollo:
    php artisan serve
+
+8. npm run dev
 
 ## Uso
 
