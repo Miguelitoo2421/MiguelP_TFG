@@ -47,8 +47,6 @@
 
     {{-- Contenido principal scrollable --}}
     <div class="flex-1 flex flex-col overflow-auto">
-      
-
       <main class="flex-1 p-6 overflow-auto">
         {{ $slot }}
       </main>

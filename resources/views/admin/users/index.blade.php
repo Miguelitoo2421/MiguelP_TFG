@@ -7,55 +7,59 @@
     </x-slot>
   
     <x-wrapper-views x-data>
-      {{-- Acción: Registrar nuevo usuario --}}
-      <x-slot name="actions">
-        <x-primary-button @click="$dispatch('open-modal','create-user')">
-          {{ __('Register New User') }}
-        </x-primary-button>
-      </x-slot>
-  
-      {{-- Tabla de usuarios --}}
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              {{ __('Name') }}
-            </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              {{ __('Email') }}
-            </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              {{ __('Role') }}
-            </th>
-            <th scope="col" class="px-6 py-3"></th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          @foreach($users as $user)
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">{{ $user->name }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">{{ $user->email }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
-                {{ optional($user->roles->first())->name ?: '-' }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                <x-secondary-button style="link"
-                  @click="$dispatch('open-modal','edit-user-{{ $user->id }}')">
-                  {{ __('✏️') }}
-                </x-secondary-button>
-                <x-danger-button class="ml-2"
-                  @click.prevent="$dispatch('open-modal','confirm-delete-{{ $user->id }}')">
-                  {{ __('⛌') }}
-                </x-danger-button>
-              </td>
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
-  
-      {{-- Paginación --}}
-      <div class="p-4">
-        {{ $users->links() }}
+      <div class="flex flex-col">
+        {{-- Acción: Registrar nuevo usuario --}}
+        <x-slot name="actions">
+          <x-primary-button @click="$dispatch('open-modal','create-user')">
+            {{ __('Register New User') }}
+          </x-primary-button>
+        </x-slot>
+    
+        {{-- Tabla de usuarios --}}
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  {{ __('Name') }}
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  {{ __('Email') }}
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  {{ __('Role') }}
+                </th>
+                <th scope="col" class="px-6 py-3"></th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @foreach($users as $user)
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">{{ $user->name }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">{{ $user->email }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">
+                    {{ optional($user->roles->first())->name ?: '-' }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                    <x-secondary-button style="link"
+                      @click="$dispatch('open-modal','edit-user-{{ $user->id }}')">
+                      {{ __('✏️') }}
+                    </x-secondary-button>
+                    <x-danger-button class="ml-2"
+                      @click.prevent="$dispatch('open-modal','confirm-delete-{{ $user->id }}')">
+                      {{ __('⛌') }}
+                    </x-danger-button>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+    
+        {{-- Paginación --}}
+        <div class="p-4">
+          {{ $users->links() }}
+        </div>
       </div>
   
       {{-- Modales de edición con componentización --}}
