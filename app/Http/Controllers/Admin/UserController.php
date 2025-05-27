@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Actor;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -49,6 +52,29 @@ class UserController extends Controller
 
         // Asignamos un único rol
         $user->assignRole($data['role']);
+
+        // Si el rol es 'user', creamos automáticamente un actor
+        if ($data['role'] === 'user') {
+            // Aseguramos que existe el directorio
+            Storage::disk('public')->makeDirectory('actors');
+            
+            // Copiamos la imagen por defecto
+            $defaultImage = public_path('images/default_user_avatar.svg');
+            $defaultImagePath = 'actors/default_user_avatar.svg';
+            
+            if (File::exists($defaultImage)) {
+                Storage::disk('public')->put($defaultImagePath, File::get($defaultImage));
+            }
+
+            Actor::create([
+                'first_name' => $user->name,
+                'last_name'  => '',
+                'email'      => $user->email,
+                'role'       => 'user',
+                'active'     => true,
+                'image'      => $defaultImagePath,
+            ]);
+        }
 
         return redirect()
             ->route('admin.users.index')

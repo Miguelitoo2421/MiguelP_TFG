@@ -10,6 +10,12 @@ return [
     ],
 
     [
+        'name'  => 'Actors',
+        'route' => 'actors.index',
+        'roles' => ['admin', 'user'],
+    ],
+
+    [
         'name'  => 'Users',
         'route' => 'admin.users.index',
         'roles' => ['admin'],
@@ -30,12 +36,6 @@ return [
     [
         'name'  => 'Plays',
         'route' => 'plays.index',
-        'roles' => ['admin'],
-    ],
-
-    [
-        'name'  => 'Actors',
-        'route' => 'actors.index',
         'roles' => ['admin'],
     ],
 

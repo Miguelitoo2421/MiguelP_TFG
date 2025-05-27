@@ -5,18 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\Actor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ActorController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        // ->middleware('role:admin'); // si quieres restringir a admins
+        // Proteger rutas que solo son para admin
+        $this->middleware('role:admin')->only(['store', 'destroy']);
     }
 
     public function index()
     {
-        $actors = Actor::orderBy('last_name')->paginate(15);
+        $user = Auth::user();
+        
+        // Si es admin, ve todos los actores
+        if ($user->roles->pluck('name')->contains('admin')) {
+            $actors = Actor::orderBy('last_name')->paginate(15);
+        } 
+        // Si es user, solo ve su propio actor
+        else {
+            $actors = Actor::where('email', $user->email)
+                         ->orderBy('last_name')
+                         ->paginate(15);
+        }
+
         return view('actors.index', compact('actors'));
     }
 
@@ -50,6 +64,13 @@ class ActorController extends Controller
 
     public function update(Request $request, Actor $actor)
     {
+        $user = Auth::user();
+        
+        // Verificar si el usuario puede actualizar este actor
+        if (!$user->roles->pluck('name')->contains('admin') && $actor->email !== $user->email) {
+            return back()->with('error', 'No tienes permisos para realizar esta acción.');
+        }
+
         $data = $request->validate([
             'first_name' => ['required','string','max:50'],
             'last_name'  => ['required','string','max:50'],

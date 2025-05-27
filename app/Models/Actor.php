@@ -28,6 +28,7 @@ class Actor extends Model
         'active',
         'image',   
         'notes',
+        'role',
     ];
 
     
