@@ -57,12 +57,6 @@
              class="barber-font text-lg px-5 py-2 bg-red-600 text-white rounded hover:bg-red-500 transition">
             Log in
           </a>
-          @if (Route::has('register'))
-            <a href="{{ route('register') }}"
-               class="barber-font text-lg px-5 py-2 border border-red-600 text-red-600 rounded hover:bg-red-50 transition">
-              Register
-            </a>
-          @endif
         @endauth
       </nav>
     @endif

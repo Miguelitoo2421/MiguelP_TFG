@@ -10,7 +10,6 @@
       href="{{ asset('images/logo_barra_busqueda.png') }}"
       sizes="64x64 32x32 16x16">
 
-
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.bunny.net">
   <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -25,6 +24,7 @@
   ></script>
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+  @stack('styles')
 </head>
 <body class="font-sans antialiased bg-gray-100">
 
@@ -47,8 +47,6 @@
 
     {{-- Contenido principal scrollable --}}
     <div class="flex-1 flex flex-col overflow-auto">
-      
-
       <main class="flex-1 p-6 overflow-auto">
         {{ $slot }}
       </main>

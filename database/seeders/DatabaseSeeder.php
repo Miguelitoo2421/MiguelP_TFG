@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
             ProducerSeeder::class,
             PlaySeeder::class,
             LocationSeeder::class,
-            ActorSeeder::class,
             CharactersSeeder::class,
         ]);
 

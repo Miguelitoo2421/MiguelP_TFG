@@ -36,6 +36,23 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| RUTAS DE ACTORES (accesibles para admin y user)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('actors', [ActorController::class, 'index'])->name('actors.index');
+    Route::get('actors/{actor}', [ActorController::class, 'show'])->name('actors.show');
+    Route::patch('actors/{actor}', [ActorController::class, 'update'])->name('actors.update');
+    
+    // Rutas solo para admin
+    Route::middleware('role:admin')->group(function () {
+        Route::post('actors', [ActorController::class, 'store'])->name('actors.store');
+        Route::delete('actors/{actor}', [ActorController::class, 'destroy'])->name('actors.destroy');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
 | ADMIN: Gestión de Usuarios (nombres admin.*)
 |--------------------------------------------------------------------------
 */
@@ -62,7 +79,6 @@ Route::prefix('admin')
          Route::resource('producers',  ProducerController::class);
          Route::resource('plays',      PlayController::class);
          Route::resource('characters', CharacterController::class);
-         Route::resource('actors',     ActorController::class);
          Route::resource('locations',  LocationController::class);
          Route::resource('events',     EventController::class);
          Route::post('events/{event}/casts', [EventCastController::class, 'store'])

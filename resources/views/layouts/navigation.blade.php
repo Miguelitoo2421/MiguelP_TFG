@@ -7,7 +7,7 @@
   ];
 @endphp
 
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white border-b border-gray-100 sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
     {{-- Logo --}}
     <div class="flex-shrink-0">
@@ -15,6 +15,14 @@
         <x-application-logo class="" />
       </a>
     </div>
+
+    {{-- Botón móvil Marvel Plays --}}
+    <x-sidebar-plays-button
+      class="absolute left-20 sm:hidden"
+      x-cloak
+    >
+      Marvel Plays
+    </x-sidebar-plays-button>
 
     {{-- Usuario (desktop ≥sm) --}}
     <div class="hidden sm:flex sm:items-center sm:ml-6" x-data>

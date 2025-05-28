@@ -10,6 +10,12 @@ return [
     ],
 
     [
+        'name'  => 'Actors',
+        'route' => 'actors.index',
+        'roles' => ['admin', 'user'],
+    ],
+
+    [
         'name'  => 'Users',
         'route' => 'admin.users.index',
         'roles' => ['admin'],
@@ -18,37 +24,31 @@ return [
     [
         'name'  => 'Characters',
         'route' => 'characters.index',
-        'roles' => ['admin', 'user'],
+        'roles' => ['admin'],
     ],
 
     [
         'name'  => 'Producers',
         'route' => 'producers.index',
-        'roles' => ['admin', 'user'],
+        'roles' => ['admin'],
     ],
 
     [
         'name'  => 'Plays',
         'route' => 'plays.index',
-        'roles' => ['admin', 'user'],
-    ],
-
-    [
-        'name'  => 'Actors',
-        'route' => 'actors.index',
-        'roles' => ['admin', 'user'],
+        'roles' => ['admin'],
     ],
 
     [
         'name'  => 'Locations',
         'route' => 'locations.index',
-        'roles' => ['admin', 'user'],
+        'roles' => ['admin'],
     ],
 
     [
         'name'  => 'Events',
         'route' => 'events.index',
-        'roles' => ['admin', 'user'],
+        'roles' => ['admin'],
     ],
 
 ];

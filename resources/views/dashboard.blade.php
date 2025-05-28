@@ -29,28 +29,36 @@
                                 }
                             }, 1000)"
                         >
-                            <div class="relative h-[400px] flex items-center justify-center">
-                                <div class="carousel relative w-full h-full [perspective:1000px] [transform-style:preserve-3d]">
-                                    <div 
-                                        class="carousel-items relative w-full h-full [transform-style:preserve-3d] will-change-transform"
-                                        :class="{ 'animation-paused': isPaused }"
-                                    >
-                                        @foreach($events as $index => $event)
-                                            <div 
-                                                class="carousel-item absolute w-[250px] h-[160px] left-1/2 top-1/2 [transform-style:preserve-3d] [backface-visibility:hidden] [transform-origin:center]" 
-                                                style="--i:{{ $index }}; --total:{{ count($events) }}"
-                                                @mouseenter="hoveredIndex = {{ $index }}; isPaused = true"
-                                                @mouseleave="hoveredIndex = null; isPaused = false"
-                                            >
-                                                <img
-                                                    src="{{ $event->play->image_url }}"
-                                                    alt="{{ $event->title }}"
-                                                    class="w-full h-full object-cover rounded-lg shadow-lg brightness-85 transition-all duration-300 ease-in-out will-change-transform hover:brightness-100 hover:scale-105 hover:shadow-xl border border-white/30"
+                            {{-- Carrusel 3D (Desktop) --}}
+                            <div class="hidden sm:block">
+                                <div class="relative h-[400px] flex items-center justify-center">
+                                    <div class="carousel relative w-full h-full [perspective:1000px] [transform-style:preserve-3d]">
+                                        <div 
+                                            class="carousel-items relative w-full h-full [transform-style:preserve-3d] will-change-transform"
+                                            :class="{ 'animation-paused': isPaused }"
+                                        >
+                                            @foreach($events as $index => $event)
+                                                <div 
+                                                    class="carousel-item absolute w-[250px] h-[160px] left-1/2 top-1/2 [transform-style:preserve-3d] [backface-visibility:hidden] [transform-origin:center]" 
+                                                    style="--i:{{ $index }}; --total:{{ count($events) }}"
+                                                    @mouseenter="hoveredIndex = {{ $index }}; isPaused = true"
+                                                    @mouseleave="hoveredIndex = null; isPaused = false"
                                                 >
-                                            </div>
-                                        @endforeach
+                                                    <img
+                                                        src="{{ $event->play->image_url }}"
+                                                        alt="{{ $event->title }}"
+                                                        class="w-full h-full object-cover rounded-lg shadow-lg brightness-85 transition-all duration-300 ease-in-out will-change-transform hover:brightness-100 hover:scale-105 hover:shadow-xl border border-white/30"
+                                                    >
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            {{-- Carrusel Simple (Móvil) --}}
+                            <div class="sm:hidden">
+                                <x-carousel-mobile :events="$events" :rotationInterval="$rotationInterval" />
                             </div>
 
                             {{-- Sección de información de eventos --}}
